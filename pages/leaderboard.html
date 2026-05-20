@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta
+  name="description"
+  content="Ultimate Quiz Arena - Advanced animated quiz game built using HTML CSS and JavaScript">
+
+<meta
+  name="keywords"
+  content="Quiz App, JavaScript Quiz, HTML CSS JS Project">
+
+<meta
+  name="author"
+  content="Sai pechetti">
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>Leaderboard</title>
+
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+
+  <link rel="stylesheet"
+        href="../css/leaderboard.css">
+
+</head>
+
+<body>
+
+  <!-- Loading Screen -->
+
+  <div id="loadingScreen">
+
+    <div class="loader"></div>
+
+    <h2>Loading Leaderboard...</h2>
+
+  </div>
+
+  <!-- Particles -->
+
+  <div id="particles"></div>
+
+  <!-- Main -->
+
+  <main class="leaderboard-container">
+
+    <div class="leaderboard-card">
+
+      <h1>
+        Ultimate Quiz Arena Leaderboard
+      </h1>
+
+      <p class="subtitle">
+        Top quiz warriors competing for the highest score.
+      </p>
+
+      <!-- Daily Challenge -->
+
+      <div class="daily-challenge">
+
+        <h2>
+          Daily Challenge
+        </h2>
+
+        <p id="dailyChallengeText">
+          Complete a hard quiz with 90% accuracy.
+        </p>
+
+      </div>
+
+      <!-- Achievements -->
+
+      <div class="achievements">
+
+        <h2>
+          Achievements
+        </h2>
+
+        <div id="achievementList">
+
+        </div>
+
+      </div>
+
+      <!-- Table -->
+
+      <div class="table-wrapper">
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>Rank</th>
+              <th>Player</th>
+              <th>Score</th>
+              <th>Total</th>
+              <th>Date</th>
+
+            </tr>
+
+          </thead>
+
+          <tbody id="leaderboardBody">
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+      <!-- Buttons -->
+
+      <div class="buttons">
+
+        <button id="homeBtn">
+          Home
+        </button>
+
+        <button id="clearBtn">
+          Clear Leaderboard
+        </button>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- Toast -->
+
+  <div id="toast"></div>
+
+  <script src="../js/leaderboard.js"></script>
+
+</body>
+</html>

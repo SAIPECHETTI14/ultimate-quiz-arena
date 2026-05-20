@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta
+  name="description"
+  content="Ultimate Quiz Arena - Advanced animated quiz game built using HTML CSS and JavaScript">
+
+<meta
+  name="keywords"
+  content="Quiz App, JavaScript Quiz, HTML CSS JS Project">
+
+<meta
+  name="author"
+  content="Sai pechetti">
+  
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<link rel="icon" href="images/favicon.ico">
+  <title>Ultimate Quiz Arena</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+</head>
+
+<body>
+
+  <!-- Animated Background -->
+  <div class="background-animation"></div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">
+      Ultimate Quiz Arena
+    </div>
+
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="pages/leaderboard.html">Leaderboard</a></li>
+    </ul>
+
+    <div class="nav-actions">
+
+      <button id="themeToggle" class="theme-btn">
+        🌙
+      </button>
+
+      <button class="mobile-menu-btn" id="mobileMenuBtn">
+        ☰
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <main class="hero">
+
+    <div class="glass-card">
+
+      <h1 class="main-title">
+        Ultimate Quiz Arena
+      </h1>
+
+      <p class="subtitle">
+        <div class="offline-box">
+
+  🌐 Online API + Offline Custom Categories Supported
+
+</div>
+        Test your knowledge with powerful quizzes,
+        live scores, animated gameplay, and leaderboard battles.
+      </p>
+
+      <!-- Quiz Form -->
+      <form id="quizConfigForm">
+
+        <!-- Category -->
+        <div class="input-group">
+          <label>Choose Category</label>
+
+      <select id="category">
+
+  <option value="9">
+    🌍 General Knowledge
+  </option>
+
+  <option value="18">
+    💻 Computer Science
+  </option>
+
+  <option value="17">
+    🔬 Science
+  </option>
+
+  <option value="21">
+    ⚽ Sports
+  </option>
+
+  <option value="11">
+    🎬 Movies
+  </option>
+
+  <!-- LOCAL CATEGORIES -->
+
+  <option value="coding">
+    👨‍💻 Coding
+  </option>
+
+  <option value="scienceLocal">
+    🧪 Science Local
+  </option>
+
+  <option value="anime">
+    🍥 Anime
+  </option>
+
+  <option value="moviesLocal">
+    🎥 Movies Local
+  </option>
+
+  <option value="sportsLocal">
+    🏆 Sports Local
+  </option>
+
+</select>
+        </div>
+
+        <!-- Difficulty -->
+        <div class="input-group">
+          <label>Difficulty</label>
+
+          <select id="difficulty">
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+          </select>
+        </div>
+
+        <!-- Questions -->
+        <div class="input-group">
+          <label>Number of Questions</label>
+
+          <input
+            type="number"
+            id="amount"
+            value="10"
+            min="5"
+            max="30"
+          />
+        </div>
+
+        <!-- Player Name -->
+        <div class="input-group">
+          <label>Player Name</label>
+
+          <input
+            type="text"
+            id="playerName"
+            placeholder="Enter your name"
+            required
+          />
+        </div>
+
+        <!-- Start Button -->
+        <button type="submit" class="start-btn">
+          Start Quiz
+        </button>
+
+      </form>
+
+    </div>
+
+  </main>
+
+  <!-- Toast -->
+  <div id="toast"></div>
+
+  <script src="js/theme.js"></script>
+  <script src="script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta
+  name="description"
+  content="Ultimate Quiz Arena - Advanced animated quiz game built using HTML CSS and JavaScript">
+
+<meta
+  name="keywords"
+  content="Quiz App, JavaScript Quiz, HTML CSS JS Project">
+
+<meta
+  name="author"
+  content="Sai pechetti">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Quiz Arena</title>
+
+<link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+
+<link rel="stylesheet" href="../css/quiz.css">
+
+</head>
+
+<body>
+
+  <div class="quiz-container">
+
+    <div class="top-bar">
+
+      <div id="questionCounter">
+        Question 1 / 10
+      </div>
+
+      <div id="timer">
+        15
+      </div>
+
+    </div>
+
+    <div class="progress-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div class="question-card">
+
+      <div id="categoryBadge">
+        General Knowledge
+      </div>
+
+      <div id="difficultyBadge">
+        Easy
+      </div>
+
+      <h2 id="question">
+        Loading Question...
+      </h2>
+
+      <div id="answers"></div>
+
+    </div>
+
+    <div class="buttons">
+
+      <button id="prevBtn">
+        Previous
+      </button>
+
+      <button id="nextBtn">
+        Next
+      </button>
+
+    </div>
+
+  </div>
+  <script src="../data/coding.js"></script>
+<script src="../data/science.js"></script>
+<script src="../data/anime.js"></script>
+<script src="../data/movies.js"></script>
+<script src="../data/sports.js"></script>
+
+  <script src="../js/api.js"></script>
+  <script src="../js/quiz.js"></script>
+
+</body>
+</html>
