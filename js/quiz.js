@@ -4,12 +4,6 @@ const questionElement =
 const answersElement =
   document.getElementById("answers");
 
-const nextBtn =
-  document.getElementById("nextBtn");
-
-const prevBtn =
-  document.getElementById("prevBtn");
-
 const timerElement =
   document.getElementById("timer");
 
@@ -25,7 +19,7 @@ const categoryBadge =
 const difficultyBadge =
   document.getElementById("difficultyBadge");
 
-// QUIZ VARIABLES
+// VARIABLES
 
 let questions = [];
 
@@ -37,9 +31,9 @@ let timer;
 
 let timeLeft = 15;
 
-let selectedAnswers = [];
-
 let totalTimeTaken = 0;
+
+let answered = false;
 
 // SOUNDS
 
@@ -54,7 +48,7 @@ const warningSound =
 
 // START QUIZ
 
-async function startQuiz() {
+async function startQuiz(){
 
   const category =
     localStorage.getItem("quizCategory");
@@ -67,16 +61,12 @@ async function startQuiz() {
       localStorage.getItem("quizAmount")
     );
 
-  // FETCH QUESTIONS
-
   questions =
     await fetchQuestions(
       category,
       difficulty,
       amount
     );
-
-  // CHECK
 
   if(
     !questions ||
@@ -87,15 +77,12 @@ async function startQuiz() {
       "Failed to load questions.";
 
     return;
-  }
 
-  currentQuestionIndex = 0;
+  }
 
   showQuestion();
 
 }
-
-// START QUIZ
 
 startQuiz();
 
@@ -103,55 +90,31 @@ startQuiz();
 
 function showQuestion(){
 
-  // STOP OLD WARNING SOUND
-
-  warningSound.pause();
-
-  warningSound.currentTime = 0;
+  answered = false;
 
   resetState();
 
   const currentQuestion =
     questions[currentQuestionIndex];
 
-  // SAFETY
-
-  if(!currentQuestion){
-
-    questionElement.textContent =
-      "Question not found.";
-
-    return;
-  }
-
-  // QUESTION COUNTER
-
   questionCounter.textContent =
     `Question ${
       currentQuestionIndex + 1
     } / ${questions.length}`;
-
-  // CATEGORY
 
   categoryBadge.textContent =
     decodeHTML(
       currentQuestion.category
     );
 
-  // DIFFICULTY
-
   difficultyBadge.textContent =
     currentQuestion.difficulty
       .toUpperCase();
-
-  // QUESTION
 
   questionElement.innerHTML =
     decodeHTML(
       currentQuestion.question
     );
-
-  // PROGRESS BAR
 
   progressBar.style.width =
     `${
@@ -161,23 +124,17 @@ function showQuestion(){
       ) * 100
     }%`;
 
-  // ANSWERS
-
   const answers = [
 
-    ...(currentQuestion.incorrect_answers || []),
+    ...currentQuestion.incorrect_answers,
 
     currentQuestion.correct_answer
 
   ];
 
-  // SHUFFLE
-
   answers.sort(
     () => Math.random() - 0.5
   );
-
-  // CREATE BUTTONS
 
   answers.forEach((answer) => {
 
@@ -193,14 +150,10 @@ function showQuestion(){
 
     button.addEventListener(
       "click",
-      () => {
-
-        selectAnswer(
-          button,
-          answer
-        );
-
-      }
+      () => selectAnswer(
+        button,
+        answer
+      )
     );
 
     answersElement.appendChild(
@@ -208,8 +161,6 @@ function showQuestion(){
     );
 
   });
-
-  // START TIMER
 
   startTimer();
 
@@ -220,8 +171,6 @@ function showQuestion(){
 function resetState(){
 
   clearInterval(timer);
-
-  // STOP WARNING SOUND
 
   warningSound.pause();
 
@@ -240,19 +189,6 @@ function resetState(){
 
 function startTimer(){
 
-  clearInterval(timer);
-
-  // RESET WARNING SOUND
-
-  warningSound.pause();
-
-  warningSound.currentTime = 0;
-
-  timeLeft = 15;
-
-  timerElement.textContent =
-    timeLeft;
-
   timer =
     setInterval(() => {
 
@@ -263,14 +199,12 @@ function startTimer(){
       timerElement.textContent =
         timeLeft;
 
-      // WARNING SOUND
+      // WARNING
 
       if(
         timeLeft <= 8 &&
         timeLeft > 0
       ){
-
-        // PLAY ONLY ONCE
 
         if(warningSound.paused){
 
@@ -282,25 +216,27 @@ function startTimer(){
 
       }
 
-      // TIMER END
+      // TIME UP
 
       if(timeLeft <= 0){
 
         clearInterval(timer);
 
-        timerElement.textContent = 0;
-
-        // STOP SOUND
-
         warningSound.pause();
 
         warningSound.currentTime = 0;
 
-        autoNextQuestion();
+        lockAnswers();
+
+        setTimeout(() => {
+
+          nextQuestion();
+
+        }, 1000);
 
       }
 
-    }, 1000);
+    },1000);
 
 }
 
@@ -311,9 +247,11 @@ function selectAnswer(
   selectedAnswer
 ){
 
-  clearInterval(timer);
+  if(answered) return;
 
-  // STOP WARNING SOUND
+  answered = true;
+
+  clearInterval(timer);
 
   warningSound.pause();
 
@@ -323,14 +261,12 @@ function selectAnswer(
     questions[currentQuestionIndex]
       .correct_answer;
 
-  const allButtons =
+  const buttons =
     document.querySelectorAll(
       ".answer-btn"
     );
 
-  // DISABLE ALL
-
-  allButtons.forEach((btn) => {
+  buttons.forEach((btn) => {
 
     btn.disabled = true;
 
@@ -342,6 +278,8 @@ function selectAnswer(
     selectedAnswer === correctAnswer
   ){
 
+    score++;
+
     button.classList.add(
       "correct"
     );
@@ -349,8 +287,6 @@ function selectAnswer(
     correctSound.currentTime = 0;
 
     correctSound.play();
-
-    score++;
 
   }
 
@@ -366,9 +302,7 @@ function selectAnswer(
 
     wrongSound.play();
 
-    // SHOW CORRECT ANSWER
-
-    allButtons.forEach((btn) => {
+    buttons.forEach((btn) => {
 
       if(
         btn.textContent ===
@@ -385,17 +319,36 @@ function selectAnswer(
 
   }
 
-  // SAVE ANSWER
+  // AUTO NEXT
 
-  selectedAnswers[
-    currentQuestionIndex
-  ] = selectedAnswer;
+  setTimeout(() => {
+
+    nextQuestion();
+
+  },1200);
 
 }
 
-// AUTO NEXT
+// LOCK ANSWERS
 
-function autoNextQuestion(){
+function lockAnswers(){
+
+  const buttons =
+    document.querySelectorAll(
+      ".answer-btn"
+    );
+
+  buttons.forEach((btn) => {
+
+    btn.disabled = true;
+
+  });
+
+}
+
+// NEXT QUESTION
+
+function nextQuestion(){
 
   if(
     currentQuestionIndex <
@@ -416,64 +369,11 @@ function autoNextQuestion(){
 
 }
 
-// NEXT BUTTON
-
-nextBtn.addEventListener(
-  "click",
-  () => {
-
-    warningSound.pause();
-
-    warningSound.currentTime = 0;
-
-    if(
-      currentQuestionIndex <
-      questions.length - 1
-    ){
-
-      currentQuestionIndex++;
-
-      showQuestion();
-
-    }
-
-    else{
-
-      finishQuiz();
-
-    }
-
-  }
-);
-
-// PREVIOUS BUTTON
-
-prevBtn.addEventListener(
-  "click",
-  () => {
-
-    warningSound.pause();
-
-    warningSound.currentTime = 0;
-
-    if(currentQuestionIndex > 0){
-
-      currentQuestionIndex--;
-
-      showQuestion();
-
-    }
-
-  }
-);
-
 // FINISH QUIZ
 
 function finishQuiz(){
 
   clearInterval(timer);
-
-  // STOP WARNING SOUND
 
   warningSound.pause();
 
@@ -504,11 +404,7 @@ function finishQuiz(){
     totalTimeTaken
   );
 
-  // SAVE LEADERBOARD
-
   saveLeaderboard();
-
-  // RESULT PAGE
 
   window.location.href =
     "result.html";
@@ -544,13 +440,9 @@ function saveLeaderboard(){
 
   });
 
-  // SORT
-
   leaderboard.sort(
     (a,b) => b.score - a.score
   );
-
-  // SAVE TOP 10
 
   localStorage.setItem(
     "leaderboard",
@@ -562,28 +454,7 @@ function saveLeaderboard(){
 
 }
 
-// KEYBOARD SHORTCUTS
-
-document.addEventListener(
-  "keydown",
-  (e) => {
-
-    if(e.key === "ArrowRight"){
-
-      nextBtn.click();
-
-    }
-
-    if(e.key === "ArrowLeft"){
-
-      prevBtn.click();
-
-    }
-
-  }
-);
-
-// DECODE HTML
+// HTML DECODE
 
 function decodeHTML(html){
 
