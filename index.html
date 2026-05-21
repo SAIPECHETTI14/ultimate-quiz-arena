@@ -65,12 +65,12 @@
         Ultimate Quiz Arena
       </h1>
 
-      <p class="subtitle">
         <div class="offline-box">
 
-  🌐 Online API + Offline Custom Categories Supported
+         🌐 Online API + Offline Custom Categories Supported
+        </div>
 
-</div>
+      <p class="subtitle">
         Test your knowledge with powerful quizzes,
         live scores, animated gameplay, and leaderboard battles.
       </p>
@@ -80,69 +80,60 @@
 
         <!-- Category -->
         <div class="input-group">
-          <label>Choose Category</label>
+
+          <label for="category">
+              Choose Category
+          </label>
 
       <select id="category">
 
-  <option value="9">
-    🌍 General Knowledge
-  </option>
+       <option value="9">🌍 General Knowledge</option>
 
-  <option value="18">
-    💻 Computer Science
-  </option>
+       <option value="18">💻 Computer Science</option>
 
-  <option value="17">
-    🔬 Science
-  </option>
+       <option value="17">🔬 Science</option>
 
-  <option value="21">
-    ⚽ Sports
-  </option>
+       <option value="21">⚽ Sports</option>
 
-  <option value="11">
-    🎬 Movies
-  </option>
+       <option value="11">🎬 Movies</option>
 
-  <!-- LOCAL CATEGORIES -->
+       <option value="coding">👨‍💻 Coding</option>
 
-  <option value="coding">
-    👨‍💻 Coding
-  </option>
+       <option value="scienceLocal">🧪 Science Local</option>
 
-  <option value="scienceLocal">
-    🧪 Science Local
-  </option>
+       <option value="anime">🍥 Anime</option>
 
-  <option value="anime">
-    🍥 Anime
-  </option>
+       <option value="moviesLocal">🎥 Movies Local</option>
 
-  <option value="moviesLocal">
-    🎥 Movies Local
-  </option>
+       <option value="sportsLocal">🏆 Sports Local</option>
 
-  <option value="sportsLocal">
-    🏆 Sports Local
-  </option>
+      </select>
 
-</select>
-        </div>
+     </div>
 
-        <!-- Difficulty -->
-        <div class="input-group">
-          <label>Difficulty</label>
+     <!-- Difficulty -->
+     <div class="input-group">
 
-          <select id="difficulty">
+      <label for="difficulty">
+        Difficulty
+      </label>
+
+      <select id="difficulty">
             <option value="easy">Easy</option>
+
             <option value="medium">Medium</option>
+
             <option value="hard">Hard</option>
+
           </select>
-        </div>
+     </div>
 
         <!-- Questions -->
         <div class="input-group">
-          <label>Number of Questions</label>
+          
+          <label for="amount">
+            Number of Questions
+          </label>
 
           <input
             type="number"
@@ -151,11 +142,13 @@
             min="5"
             max="30"
           />
-        </div>
+         </div>
 
         <!-- Player Name -->
         <div class="input-group">
-          <label>Player Name</label>
+          <label for="playerName">
+            Player Name
+          </label>
 
           <input
             type="text"
@@ -163,10 +156,11 @@
             placeholder="Enter your name"
             required
           />
-        </div>
+         </div>
 
         <!-- Start Button -->
-        <button type="submit" class="start-btn">
+        <button type="submit" class="start-btn"
+        >
           Start Quiz
         </button>
 
