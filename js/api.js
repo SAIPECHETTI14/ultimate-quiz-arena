@@ -1,73 +1,184 @@
-// LOCAL CATEGORY MAP
+// SHUFFLE ARRAY
 
-const localCategories = {
+function shuffleArray(array){
 
-  coding: codingQuestions,
+  return array.sort(
+    () => Math.random() - 0.5
+  );
 
-  scienceLocal: scienceQuestions,
+}
 
-  anime: animeQuestions,
+// REMOVE DUPLICATES
 
-  moviesLocal: moviesQuestions,
+function removeDuplicates(array){
 
-  sportsLocal: sportsQuestions
+  const seen = new Set();
 
-};
+  return array.filter((item) => {
 
-// FETCH QUIZ QUESTIONS
+    if(seen.has(item.question)){
 
-async function fetchQuizQuestions() {
+      return false;
 
-  try {
+    }
 
-    const category =
-      localStorage.getItem("quizCategory") || 9;
+    seen.add(item.question);
 
-    const difficulty =
-      localStorage.getItem("quizDifficulty") || "easy";
+    return true;
 
-    const amount =
-      Number(localStorage.getItem("quizAmount")) || 10;
+  });
 
-    // LOCAL QUESTIONS
+}
 
-    if(localCategories[category]){
+// FETCH QUESTIONS
 
-      let localData =
-        [...localCategories[category]];
+async function fetchQuestions(
+  category,
+  difficulty,
+  amount
+){
 
-      // FILTER DIFFICULTY
+  // LOCAL CATEGORY SYSTEM
 
-      localData = localData.filter(q =>
-        q.difficulty === difficulty
+  if(category === "coding"){
+
+    const uniqueQuestions =
+      removeDuplicates(
+        codingQuestions
       );
 
-      // SHUFFLE
+    return handleLocalQuestions(
+      uniqueQuestions,
+      amount,
+      "Coding"
+    );
 
-      localData.sort(() => Math.random() - 0.5);
+  }
 
-      return localData.slice(0, amount);
+  if(category === "scienceLocal"){
 
-    }
+    const uniqueQuestions =
+      removeDuplicates(
+        scienceQuestions
+      );
 
-    // ONLINE API
+    return handleLocalQuestions(
+      uniqueQuestions,
+      amount,
+      "Science"
+    );
 
-    const apiURL =
+  }
+
+  if(category === "moviesLocal"){
+
+    const uniqueQuestions =
+      removeDuplicates(
+        moviesQuestions
+      );
+
+    return handleLocalQuestions(
+      uniqueQuestions,
+      amount,
+      "Movies"
+    );
+
+  }
+
+  if(category === "anime"){
+
+    const uniqueQuestions =
+      removeDuplicates(
+        animeQuestions
+      );
+
+    return handleLocalQuestions(
+      uniqueQuestions,
+      amount,
+      "Anime"
+    );
+
+  }
+
+  if(category === "sportsLocal"){
+
+    const uniqueQuestions =
+      removeDuplicates(
+        sportsQuestions
+      );
+
+    return handleLocalQuestions(
+      uniqueQuestions,
+      amount,
+      "Sports"
+    );
+
+  }
+
+  // API CATEGORIES
+
+  try{
+
+    const url =
       `https://opentdb.com/api.php?amount=${amount}&category=${category}&difficulty=${difficulty}&type=multiple`;
 
-    const response = await fetch(apiURL);
+    const response =
+      await fetch(url);
 
-    const data = await response.json();
+    const data =
+      await response.json();
 
-    if(!data.results){
+    if(
+      data.response_code !== 0 ||
+      !data.results
+    ){
 
-      throw new Error("API Failed");
+      throw new Error(
+        "Failed to fetch questions"
+      );
 
     }
 
-    return data.results;
+    let questions =
+      data.results.map((q) => {
 
-  } catch(error){
+        return {
+
+          question:q.question,
+
+          correct_answer:
+            q.correct_answer,
+
+          incorrect_answers:
+            q.incorrect_answers,
+
+          category:q.category,
+
+          difficulty:q.difficulty
+
+        };
+
+      });
+
+    // REMOVE DUPLICATES
+
+    questions =
+      removeDuplicates(
+        questions
+      );
+
+    // SHUFFLE
+
+    questions =
+      shuffleArray(
+        questions
+      );
+
+    return questions.slice(0, amount);
+
+  }
+
+  catch(error){
 
     console.error(error);
 
@@ -77,15 +188,33 @@ async function fetchQuizQuestions() {
 
 }
 
-// HTML DECODE
+// HANDLE LOCAL QUESTIONS
 
-function decodeHTML(html){
+function handleLocalQuestions(
+  questions,
+  amount,
+  categoryName
+){
 
-  const txt =
-    document.createElement("textarea");
+  // SHUFFLE
 
-  txt.innerHTML = html;
+  questions =
+    shuffleArray(
+      questions
+    );
 
-  return txt.value;
+  // NOT ENOUGH QUESTIONS
+
+  if(amount > questions.length){
+
+    alert(
+      `Only ${questions.length} unique ${categoryName} questions available.`
+    );
+
+  }
+
+  // RETURN UNIQUE ONLY
+
+  return questions.slice(0, amount);
 
 }

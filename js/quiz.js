@@ -1,22 +1,31 @@
-const questionElement = document.getElementById("question");
+const questionElement =
+  document.getElementById("question");
 
-const answersElement = document.getElementById("answers");
+const answersElement =
+  document.getElementById("answers");
 
-const nextBtn = document.getElementById("nextBtn");
+const nextBtn =
+  document.getElementById("nextBtn");
 
-const prevBtn = document.getElementById("prevBtn");
+const prevBtn =
+  document.getElementById("prevBtn");
 
-const timerElement = document.getElementById("timer");
+const timerElement =
+  document.getElementById("timer");
 
-const progressBar = document.getElementById("progressBar");
+const progressBar =
+  document.getElementById("progressBar");
 
-const questionCounter = document.getElementById("questionCounter");
+const questionCounter =
+  document.getElementById("questionCounter");
 
-const categoryBadge = document.getElementById("categoryBadge");
+const categoryBadge =
+  document.getElementById("categoryBadge");
 
-const difficultyBadge = document.getElementById("difficultyBadge");
+const difficultyBadge =
+  document.getElementById("difficultyBadge");
 
-// Quiz Variables
+// QUIZ VARIABLES
 
 let questions = [];
 
@@ -32,197 +41,343 @@ let selectedAnswers = [];
 
 let totalTimeTaken = 0;
 
-// Sound Effects
+// SOUNDS
 
-const correctSound = new Audio(
-  "https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3"
-);
+const correctSound =
+  new Audio("../sounds/correct.mp3");
 
-const wrongSound = new Audio(
-  "https://assets.mixkit.co/active_storage/sfx/2955/2955-preview.mp3"
-);
+const wrongSound =
+  new Audio("../sounds/wrong.mp3");
 
-const warningSound = new Audio(
-  "https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3"
-);
+const warningSound =
+  new Audio("../sounds/warning.mp3");
 
-// Start Quiz
+// START QUIZ
 
 async function startQuiz() {
 
-  questions = await fetchQuizQuestions();
+  const category =
+    localStorage.getItem("quizCategory");
 
-  if (questions.length === 0) {
+  const difficulty =
+    localStorage.getItem("quizDifficulty");
 
-    alert("Failed to load quiz questions.");
+  const amount =
+    parseInt(
+      localStorage.getItem("quizAmount")
+    );
+
+  // FETCH QUESTIONS
+
+  questions =
+    await fetchQuestions(
+      category,
+      difficulty,
+      amount
+    );
+
+  // CHECK
+
+  if(
+    !questions ||
+    questions.length === 0
+  ){
+
+    questionElement.textContent =
+      "Failed to load questions.";
 
     return;
-
   }
+
+  currentQuestionIndex = 0;
 
   showQuestion();
 
 }
 
+// START QUIZ
+
 startQuiz();
 
-// Show Question
+// SHOW QUESTION
 
-function showQuestion() {
+function showQuestion(){
+
+  // STOP OLD WARNING SOUND
+
+  warningSound.pause();
+
+  warningSound.currentTime = 0;
 
   resetState();
 
-  startTimer();
+  const currentQuestion =
+    questions[currentQuestionIndex];
 
-  const currentQuestion = questions[currentQuestionIndex];
+  // SAFETY
 
-  // Update UI
+  if(!currentQuestion){
+
+    questionElement.textContent =
+      "Question not found.";
+
+    return;
+  }
+
+  // QUESTION COUNTER
 
   questionCounter.textContent =
-    `Question ${currentQuestionIndex + 1} / ${questions.length}`;
+    `Question ${
+      currentQuestionIndex + 1
+    } / ${questions.length}`;
 
-  progressBar.style.width =
-    `${((currentQuestionIndex + 1) / questions.length) * 100}%`;
+  // CATEGORY
 
   categoryBadge.textContent =
-    decodeHTML(currentQuestion.category);
-
-  difficultyBadge.textContent =
-    currentQuestion.difficulty.toUpperCase();
-
-  questionElement.innerHTML =
-    decodeHTML(currentQuestion.question);
-
-  // Answers
-
-  const answers = [
-    ...(currentQuestion.incorrect_answers || []),
-    currentQuestion.correct_answer
-  ];
-
-  // Shuffle answers
-
-  answers.sort(() => Math.random() - 0.5);
-
-  answers.forEach(answer => {
-
-    const button = document.createElement("button");
-
-    button.classList.add("answer-btn");
-
-    button.innerHTML = decodeHTML(answer);
-
-    button.addEventListener("click", () =>
-      selectAnswer(button, answer)
+    decodeHTML(
+      currentQuestion.category
     );
 
-    answersElement.appendChild(button);
+  // DIFFICULTY
+
+  difficultyBadge.textContent =
+    currentQuestion.difficulty
+      .toUpperCase();
+
+  // QUESTION
+
+  questionElement.innerHTML =
+    decodeHTML(
+      currentQuestion.question
+    );
+
+  // PROGRESS BAR
+
+  progressBar.style.width =
+    `${
+      (
+        (currentQuestionIndex + 1)
+        / questions.length
+      ) * 100
+    }%`;
+
+  // ANSWERS
+
+  const answers = [
+
+    ...(currentQuestion.incorrect_answers || []),
+
+    currentQuestion.correct_answer
+
+  ];
+
+  // SHUFFLE
+
+  answers.sort(
+    () => Math.random() - 0.5
+  );
+
+  // CREATE BUTTONS
+
+  answers.forEach((answer) => {
+
+    const button =
+      document.createElement("button");
+
+    button.classList.add(
+      "answer-btn"
+    );
+
+    button.innerHTML =
+      decodeHTML(answer);
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        selectAnswer(
+          button,
+          answer
+        );
+
+      }
+    );
+
+    answersElement.appendChild(
+      button
+    );
 
   });
 
+  // START TIMER
+
+  startTimer();
+
 }
 
-// Reset
+// RESET
 
-function resetState() {
+function resetState(){
 
   clearInterval(timer);
 
+  // STOP WARNING SOUND
+
+  warningSound.pause();
+
+  warningSound.currentTime = 0;
+
   timeLeft = 15;
 
-  timerElement.textContent = timeLeft;
+  timerElement.textContent =
+    timeLeft;
 
   answersElement.innerHTML = "";
 
 }
 
-// Timer
-
 // TIMER
 
-function startTimer() {
+function startTimer(){
 
   clearInterval(timer);
+
+  // RESET WARNING SOUND
+
+  warningSound.pause();
+
+  warningSound.currentTime = 0;
 
   timeLeft = 15;
 
-  timerElement.textContent = timeLeft;
+  timerElement.textContent =
+    timeLeft;
 
-  timer = setInterval(() => {
+  timer =
+    setInterval(() => {
 
-    timeLeft--;
+      timeLeft--;
 
-    totalTimeTaken++;
+      totalTimeTaken++;
 
-    timerElement.textContent = timeLeft;
+      timerElement.textContent =
+        timeLeft;
 
-    // WARNING SOUND
+      // WARNING SOUND
 
-    if(timeLeft <= 5 && timeLeft > 0){
+      if(
+        timeLeft <= 8 &&
+        timeLeft > 0
+      ){
 
-      warningSound.currentTime = 0;
+        // PLAY ONLY ONCE
 
-      warningSound.play();
+        if(warningSound.paused){
 
-    }
+          warningSound.currentTime = 0;
 
-    // TIME FINISHED
+          warningSound.play();
 
-    if(timeLeft <= 0){
+        }
 
-      clearInterval(timer);
+      }
 
-      timerElement.textContent = 0;
+      // TIMER END
 
-      autoNextQuestion();
+      if(timeLeft <= 0){
 
-    }
+        clearInterval(timer);
 
-  }, 1000);
+        timerElement.textContent = 0;
+
+        // STOP SOUND
+
+        warningSound.pause();
+
+        warningSound.currentTime = 0;
+
+        autoNextQuestion();
+
+      }
+
+    }, 1000);
 
 }
 
-// Select Answer
+// SELECT ANSWER
 
-function selectAnswer(button, selectedAnswer) {
+function selectAnswer(
+  button,
+  selectedAnswer
+){
 
   clearInterval(timer);
 
+  // STOP WARNING SOUND
+
+  warningSound.pause();
+
+  warningSound.currentTime = 0;
+
   const correctAnswer =
-    questions[currentQuestionIndex].correct_answer;
+    questions[currentQuestionIndex]
+      .correct_answer;
 
   const allButtons =
-    document.querySelectorAll(".answer-btn");
+    document.querySelectorAll(
+      ".answer-btn"
+    );
 
-  // Disable all buttons
+  // DISABLE ALL
 
-  allButtons.forEach(btn => {
+  allButtons.forEach((btn) => {
+
     btn.disabled = true;
+
   });
 
-  // Correct
+  // CORRECT
 
-  if (selectedAnswer === correctAnswer) {
+  if(
+    selectedAnswer === correctAnswer
+  ){
 
-    button.classList.add("correct");
+    button.classList.add(
+      "correct"
+    );
+
+    correctSound.currentTime = 0;
 
     correctSound.play();
 
     score++;
 
-  } else {
+  }
 
-    button.classList.add("wrong");
+  // WRONG
+
+  else{
+
+    button.classList.add(
+      "wrong"
+    );
+
+    wrongSound.currentTime = 0;
 
     wrongSound.play();
 
-    // Highlight correct answer
+    // SHOW CORRECT ANSWER
 
-    allButtons.forEach(btn => {
+    allButtons.forEach((btn) => {
 
-      if (btn.textContent === correctAnswer) {
+      if(
+        btn.textContent ===
+        decodeHTML(correctAnswer)
+      ){
 
-        btn.classList.add("correct");
+        btn.classList.add(
+          "correct"
+        );
 
       }
 
@@ -230,23 +385,30 @@ function selectAnswer(button, selectedAnswer) {
 
   }
 
-  // Save answer
+  // SAVE ANSWER
 
-  selectedAnswers[currentQuestionIndex] = selectedAnswer;
+  selectedAnswers[
+    currentQuestionIndex
+  ] = selectedAnswer;
 
 }
 
-// Auto Next
+// AUTO NEXT
 
-function autoNextQuestion() {
+function autoNextQuestion(){
 
-  if (currentQuestionIndex < questions.length - 1) {
+  if(
+    currentQuestionIndex <
+    questions.length - 1
+  ){
 
     currentQuestionIndex++;
 
     showQuestion();
 
-  } else {
+  }
+
+  else{
 
     finishQuiz();
 
@@ -254,45 +416,78 @@ function autoNextQuestion() {
 
 }
 
-// Next Button
+// NEXT BUTTON
 
-nextBtn.addEventListener("click", () => {
+nextBtn.addEventListener(
+  "click",
+  () => {
 
-  if (currentQuestionIndex < questions.length - 1) {
+    warningSound.pause();
 
-    currentQuestionIndex++;
+    warningSound.currentTime = 0;
 
-    showQuestion();
+    if(
+      currentQuestionIndex <
+      questions.length - 1
+    ){
 
-  } else {
+      currentQuestionIndex++;
 
-    finishQuiz();
+      showQuestion();
+
+    }
+
+    else{
+
+      finishQuiz();
+
+    }
 
   }
+);
 
-});
+// PREVIOUS BUTTON
 
-// Previous Button
+prevBtn.addEventListener(
+  "click",
+  () => {
 
-prevBtn.addEventListener("click", () => {
+    warningSound.pause();
 
-  if (currentQuestionIndex > 0) {
+    warningSound.currentTime = 0;
 
-    currentQuestionIndex--;
+    if(currentQuestionIndex > 0){
 
-    showQuestion();
+      currentQuestionIndex--;
+
+      showQuestion();
+
+    }
 
   }
+);
 
-});
+// FINISH QUIZ
 
-// Finish Quiz
+function finishQuiz(){
 
-function finishQuiz() {
+  clearInterval(timer);
 
-  localStorage.setItem("quizScore", score);
+  // STOP WARNING SOUND
 
-  localStorage.setItem("totalQuestions", questions.length);
+  warningSound.pause();
+
+  warningSound.currentTime = 0;
+
+  localStorage.setItem(
+    "quizScore",
+    score
+  );
+
+  localStorage.setItem(
+    "totalQuestions",
+    questions.length
+  );
 
   localStorage.setItem(
     "correctAnswers",
@@ -309,65 +504,96 @@ function finishQuiz() {
     totalTimeTaken
   );
 
-  // Save leaderboard
+  // SAVE LEADERBOARD
 
   saveLeaderboard();
 
-  // Redirect
+  // RESULT PAGE
 
-  window.location.href = "result.html";
+  window.location.href =
+    "result.html";
 
 }
 
-// Save Leaderboard
+// SAVE LEADERBOARD
 
-function saveLeaderboard() {
+function saveLeaderboard(){
 
   const playerName =
-    localStorage.getItem("playerName") || "Player";
+    localStorage.getItem(
+      "playerName"
+    ) || "Player";
 
   const leaderboard =
-    JSON.parse(localStorage.getItem("leaderboard")) || [];
+    JSON.parse(
+      localStorage.getItem(
+        "leaderboard"
+      )
+    ) || [];
 
   leaderboard.push({
 
-    name: playerName,
+    name:playerName,
 
-    score: score,
+    score:score,
 
-    total: questions.length,
+    total:questions.length,
 
-    date: new Date().toLocaleDateString()
+    date:new Date()
+      .toLocaleDateString()
 
   });
 
-  // Sort highest score
+  // SORT
 
-  leaderboard.sort((a, b) => b.score - a.score);
+  leaderboard.sort(
+    (a,b) => b.score - a.score
+  );
 
-  // Save top 10
+  // SAVE TOP 10
 
   localStorage.setItem(
     "leaderboard",
-    JSON.stringify(leaderboard.slice(0, 10))
+
+    JSON.stringify(
+      leaderboard.slice(0,10)
+    )
   );
 
 }
 
-// Keyboard Shortcuts
+// KEYBOARD SHORTCUTS
 
-document.addEventListener("keydown", (e) => {
+document.addEventListener(
+  "keydown",
+  (e) => {
 
-  if (e.key === "ArrowRight") {
+    if(e.key === "ArrowRight"){
 
-    nextBtn.click();
+      nextBtn.click();
+
+    }
+
+    if(e.key === "ArrowLeft"){
+
+      prevBtn.click();
+
+    }
 
   }
+);
 
-  if (e.key === "ArrowLeft") {
+// DECODE HTML
 
-    prevBtn.click();
+function decodeHTML(html){
 
-  }
+  const txt =
+    document.createElement(
+      "textarea"
+    );
 
-});
+  txt.innerHTML = html;
+
+  return txt.value;
+
+}
