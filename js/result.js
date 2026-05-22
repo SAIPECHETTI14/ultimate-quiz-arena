@@ -160,6 +160,9 @@ async function saveScore(){
           new Date()
           .toLocaleString()
 
+        amount:
+          totalQuestions
+
       }
 
     );

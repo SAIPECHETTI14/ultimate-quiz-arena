@@ -15,10 +15,6 @@
 
   <link
     rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
-
-  <link
-    rel="stylesheet"
     href="../css/leaderboard.css">
 
 </head>
@@ -37,19 +33,97 @@
 
   </div>
 
-  <!-- MAIN -->
-
   <main class="leaderboard-container">
 
     <div class="leaderboard-card">
 
       <h1>
-        Ultimate Quiz Arena Leaderboard
+        Ultimate Quiz Arena
       </h1>
 
       <p class="subtitle">
-        Global Top Players
+
+        Global Online Leaderboard
+
       </p>
+
+      <!-- FILTERS -->
+
+      <div class="filters">
+
+        <select id="categoryFilter">
+
+          <option value="all">
+            All Categories
+          </option>
+
+          <option value="coding">
+            Coding
+          </option>
+
+          <option value="scienceLocal">
+            Science
+          </option>
+
+          <option value="anime">
+            Anime
+          </option>
+
+          <option value="moviesLocal">
+            Movies
+          </option>
+
+          <option value="sportsLocal">
+            Sports
+          </option>
+
+        </select>
+
+        <select id="difficultyFilter">
+
+          <option value="all">
+            All Difficulty
+          </option>
+
+          <option value="easy">
+            Easy
+          </option>
+
+          <option value="medium">
+            Medium
+          </option>
+
+          <option value="hard">
+            Hard
+          </option>
+
+        </select>
+
+        <select id="amountFilter">
+
+          <option value="all">
+            All Questions
+          </option>
+
+          <option value="5">
+            5 Questions
+          </option>
+
+          <option value="10">
+            10 Questions
+          </option>
+
+          <option value="20">
+            20 Questions
+          </option>
+
+          <option value="30">
+            30 Questions
+          </option>
+
+        </select>
+
+      </div>
 
       <!-- TABLE -->
 
@@ -63,8 +137,9 @@
 
               <th>Rank</th>
               <th>Player</th>
+              <th>Category</th>
+              <th>Difficulty</th>
               <th>Score</th>
-              <th>Total</th>
               <th>Date</th>
 
             </tr>
@@ -79,7 +154,7 @@
 
       </div>
 
-      <!-- BUTTONS -->
+      <!-- BUTTON -->
 
       <div class="buttons">
 
