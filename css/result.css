@@ -28,6 +28,7 @@ body{
   backdrop-filter:blur(20px);
 
   animation:fadeIn 1s ease;
+  overflow:hidden;
 }
 
 @keyframes fadeIn{
@@ -145,4 +146,61 @@ canvas{
   left:0;
 
   pointer-events:none;
+}
+::-webkit-scrollbar{
+  width:10px;
+}
+
+::-webkit-scrollbar-track{
+  background:#0f172a;
+}
+
+::-webkit-scrollbar-thumb{
+  background:#7c3aed;
+  border-radius:20px;
+}
+
+*{
+  scroll-behavior:smooth;
+}
+body::before{
+
+  content:"";
+
+  position:fixed;
+
+  width:500px;
+  height:500px;
+
+  background:#7c3aed;
+
+  filter:blur(150px);
+
+  top:-200px;
+  left:-200px;
+
+  opacity:0.3;
+
+  z-index:-1;
+}
+
+body::after{
+
+  content:"";
+
+  position:fixed;
+
+  width:500px;
+  height:500px;
+
+  background:#00d9ff;
+
+  filter:blur(150px);
+
+  bottom:-200px;
+  right:-200px;
+
+  opacity:0.3;
+
+  z-index:-1;
 }

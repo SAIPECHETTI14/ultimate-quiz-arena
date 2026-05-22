@@ -33,8 +33,6 @@ async function loadLeaderboard(){
 
     leaderboardBody.innerHTML = "";
 
-    // NO SCORES
-
     if(snapshot.empty){
 
       leaderboardBody.innerHTML =
@@ -47,90 +45,92 @@ async function loadLeaderboard(){
       </tr>
       `;
 
-      return;
-
     }
 
-    let scores = [];
+    else{
 
-    snapshot.forEach((doc) => {
+      let scores = [];
 
-      scores.push(doc.data());
+      snapshot.forEach((doc) => {
 
-    });
+        scores.push(doc.data());
 
-    // SORT HIGHEST SCORE
+      });
 
-    scores.sort(
+      // SORT
 
-      (a,b) =>
+      scores.sort(
 
-      b.percentage -
-      a.percentage
+        (a,b) =>
 
-    );
+        b.percentage -
+        a.percentage
 
-    // TOP 10
+      );
 
-    scores =
-      scores.slice(0,10);
+      // TOP 10
 
-    // SHOW SCORES
+      scores =
+        scores.slice(0,10);
 
-    scores.forEach((data,index) => {
+      // DISPLAY
 
-      let medal = "";
+      scores.forEach((data,index) => {
 
-      if(index === 0){
+        let medal = "";
 
-        medal = "🥇";
+        if(index === 0){
 
-      }
+          medal = "🥇";
 
-      else if(index === 1){
+        }
 
-        medal = "🥈";
+        else if(index === 1){
 
-      }
+          medal = "🥈";
 
-      else if(index === 2){
+        }
 
-        medal = "🥉";
+        else if(index === 2){
 
-      }
+          medal = "🥉";
 
-      leaderboardBody.innerHTML +=
+        }
 
-      `
-      <tr>
+        leaderboardBody.innerHTML +=
 
-        <td>
-          ${medal}
-          ${index + 1}
-        </td>
+        `
+        <tr>
 
-        <td>
-          ${data.name || "Player"}
-        </td>
+          <td>
+            ${medal}
+            ${index + 1}
+          </td>
 
-        <td>
-          ${data.percentage || 0}%
-        </td>
+          <td>
+            ${data.name || "Player"}
+          </td>
 
-        <td>
-          ${data.score || 0}
-          /
-          ${data.total || 0}
-        </td>
+          <td>
+            ${data.percentage || 0}%
+          </td>
 
-        <td>
-          ${data.date || "-"}
-        </td>
+          <td>
+            ${data.score || 0}
+            /
+            ${data.total || 0}
+          </td>
 
-      </tr>
-      `;
+          <td>
+            ${data.date || "-"}
+          </td>
 
-    });
+        </tr>
+        `;
+
+      });
+
+    }
 
   }
 
@@ -150,6 +150,24 @@ async function loadLeaderboard(){
 
   }
 
+  // HIDE LOADING
+
+  document.getElementById(
+    "loadingScreen"
+  ).style.display = "none";
+
 }
 
 loadLeaderboard();
+
+// HOME BUTTON
+
+document.getElementById(
+  "homeBtn"
+)
+.addEventListener("click", () => {
+
+  window.location.href =
+    "../index.html";
+
+});
