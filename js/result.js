@@ -1,3 +1,17 @@
+import {
+
+  db,
+
+  collection,
+
+  addDoc
+
+}
+
+from "./firebase.js";
+
+// QUIZ DATA
+
 const score =
   Number(localStorage.getItem("quizScore")) || 0;
 
@@ -13,7 +27,16 @@ const wrongAnswers =
 const timeTaken =
   Number(localStorage.getItem("timeTaken")) || 0;
 
-// Elements
+const playerName =
+  localStorage.getItem("playerName") || "Player";
+
+const category =
+  localStorage.getItem("category") || "General";
+
+const difficulty =
+  localStorage.getItem("difficulty") || "easy";
+
+// ELEMENTS
 
 const scoreText =
   document.getElementById("scoreText");
@@ -30,158 +53,268 @@ const timeText =
 const message =
   document.getElementById("message");
 
-// Accuracy
+// ACCURACY
 
 const percentage =
-  Math.round((score / totalQuestions) * 100);
+  Math.round(
+    (score / totalQuestions) * 100
+  );
 
-// Animate Score
+// ANIMATE SCORE
 
 let current = 0;
 
 const animation = setInterval(() => {
 
-  if (current >= percentage) {
+  if(current >= percentage){
 
     clearInterval(animation);
 
-  } else {
+  }
+
+  else{
 
     current++;
 
-    scoreText.textContent = `${current}%`;
+    scoreText.textContent =
+      `${current}%`;
 
   }
 
-}, 20);
+},20);
 
-// Set Stats
+// SET STATS
 
-correctText.textContent = correctAnswers;
+correctText.textContent =
+  correctAnswers;
 
-wrongText.textContent = wrongAnswers;
+wrongText.textContent =
+  wrongAnswers;
 
-timeText.textContent = `${timeTaken}s`;
+timeText.textContent =
+  `${timeTaken}s`;
 
-// Motivational Message
+// MOTIVATION
 
-if (percentage >= 80) {
+if(percentage >= 80){
 
   message.textContent =
     "Outstanding Performance!";
 
   startConfetti();
 
-} else if (percentage >= 50) {
+}
+
+else if(percentage >= 50){
 
   message.textContent =
     "Good Job! Keep Improving!";
 
-} else {
+}
+
+else{
 
   message.textContent =
     "Practice More And Try Again!";
+
 }
 
-// Buttons
+// SAVE SCORE ONLINE
 
-document.getElementById("restartBtn")
-.addEventListener("click", () => {
+async function saveScore(){
 
-  window.location.href = "../index.html";
+  try{
 
-});
+    await addDoc(
 
-document.getElementById("leaderboardBtn")
-.addEventListener("click", () => {
+      collection(db,"leaderboard"),
 
-  window.location.href = "leaderboard.html";
+      {
 
-});
+        name: playerName,
 
-// Share Result
+        category: category,
 
-document.getElementById("shareBtn")
-.addEventListener("click", async () => {
+        difficulty: difficulty,
 
-  const shareData = {
+        score: score,
 
-    title: "Ultimate Quiz Arena",
+        total: totalQuestions,
 
-    text:
-      `I scored ${percentage}% in Ultimate Quiz Arena!`,
+        percentage: percentage,
 
-    url: window.location.href
+        correctAnswers: correctAnswers,
 
-  };
+        wrongAnswers: wrongAnswers,
 
-  if (navigator.share) {
+        timeTaken: timeTaken,
 
-    await navigator.share(shareData);
+        date:
+          new Date()
+          .toLocaleString()
 
-  } else {
+      }
 
-    alert("Sharing not supported on this browser.");
+    );
+
+    console.log(
+      "Score saved online!"
+    );
 
   }
 
+  catch(error){
+
+    console.log(
+      "Firebase Error:",
+      error
+    );
+
+  }
+
+}
+
+saveScore();
+
+// BUTTONS
+
+document.getElementById(
+  "restartBtn"
+)
+.addEventListener("click", () => {
+
+  window.location.href =
+    "../index.html";
+
 });
 
-// Simple Confetti
+document.getElementById(
+  "leaderboardBtn"
+)
+.addEventListener("click", () => {
 
-function startConfetti() {
+  window.location.href =
+    "leaderboard.html";
+
+});
+
+// SHARE
+
+document.getElementById(
+  "shareBtn"
+)
+.addEventListener(
+  "click",
+  async () => {
+
+    const shareData = {
+
+      title:
+        "Ultimate Quiz Arena",
+
+      text:
+        `I scored ${percentage}% in Ultimate Quiz Arena!`,
+
+      url:
+        window.location.href
+
+    };
+
+    if(navigator.share){
+
+      await navigator.share(
+        shareData
+      );
+
+    }
+
+    else{
+
+      alert(
+        "Sharing not supported."
+      );
+
+    }
+
+  }
+);
+
+// CONFETTI
+
+function startConfetti(){
 
   const canvas =
-    document.getElementById("confettiCanvas");
+    document.getElementById(
+      "confettiCanvas"
+    );
 
-  const ctx = canvas.getContext("2d");
+  const ctx =
+    canvas.getContext("2d");
 
-  canvas.width = window.innerWidth;
+  canvas.width =
+    window.innerWidth;
 
-  canvas.height = window.innerHeight;
+  canvas.height =
+    window.innerHeight;
 
   const pieces = [];
 
-  for (let i = 0; i < 150; i++) {
+  for(let i = 0; i < 150; i++){
 
     pieces.push({
 
-      x: Math.random() * canvas.width,
+      x:
+        Math.random()
+        *
+        canvas.width,
 
-      y: Math.random() * canvas.height,
+      y:
+        Math.random()
+        *
+        canvas.height,
 
-      size: Math.random() * 10 + 5,
+      size:
+        Math.random()
+        * 10 + 5,
 
-      speed: Math.random() * 3 + 1
+      speed:
+        Math.random()
+        * 3 + 1
 
     });
 
   }
 
-  function update() {
+  function update(){
 
     ctx.clearRect(
+
       0,
       0,
+
       canvas.width,
       canvas.height
+
     );
 
     pieces.forEach(piece => {
 
       ctx.fillStyle =
-        `hsl(${Math.random() * 360},100%,50%)`;
+        `hsl(${Math.random()*360},100%,50%)`;
 
       ctx.fillRect(
+
         piece.x,
         piece.y,
+
         piece.size,
         piece.size
+
       );
 
       piece.y += piece.speed;
 
-      if (piece.y > canvas.height) {
+      if(piece.y > canvas.height){
 
         piece.y = -10;
 
@@ -189,7 +322,9 @@ function startConfetti() {
 
     });
 
-    requestAnimationFrame(update);
+    requestAnimationFrame(
+      update
+    );
 
   }
 

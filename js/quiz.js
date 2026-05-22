@@ -35,6 +35,17 @@ let totalTimeTaken = 0;
 
 let answered = false;
 
+// QUIZ SETTINGS
+
+const playerName =
+  localStorage.getItem("playerName") || "Player";
+
+const category =
+  localStorage.getItem("quizCategory") || "General";
+
+const difficulty =
+  localStorage.getItem("quizDifficulty") || "easy";
+
 // SOUNDS
 
 const correctSound =
@@ -49,12 +60,6 @@ const warningSound =
 // START QUIZ
 
 async function startQuiz(){
-
-  const category =
-    localStorage.getItem("quizCategory");
-
-  const difficulty =
-    localStorage.getItem("quizDifficulty");
 
   const amount =
     parseInt(
@@ -199,7 +204,7 @@ function startTimer(){
       timerElement.textContent =
         timeLeft;
 
-      // WARNING
+      // WARNING SOUND
 
       if(
         timeLeft <= 8 &&
@@ -232,7 +237,7 @@ function startTimer(){
 
           nextQuestion();
 
-        }, 1000);
+        },1000);
 
       }
 
@@ -265,6 +270,8 @@ function selectAnswer(
     document.querySelectorAll(
       ".answer-btn"
     );
+
+  // FREEZE ANSWERS
 
   buttons.forEach((btn) => {
 
@@ -379,14 +386,11 @@ function finishQuiz(){
 
   warningSound.currentTime = 0;
 
+  // SAVE RESULTS
+
   localStorage.setItem(
     "quizScore",
     score
-  );
-
-  localStorage.setItem(
-    "totalQuestions",
-    questions.length
   );
 
   localStorage.setItem(
@@ -400,57 +404,34 @@ function finishQuiz(){
   );
 
   localStorage.setItem(
+    "totalQuestions",
+    questions.length
+  );
+
+  localStorage.setItem(
     "timeTaken",
     totalTimeTaken
   );
 
-  saveLeaderboard();
-
-  window.location.href =
-    "result.html";
-
-}
-
-// SAVE LEADERBOARD
-
-function saveLeaderboard(){
-
-  const playerName =
-    localStorage.getItem(
-      "playerName"
-    ) || "Player";
-
-  const leaderboard =
-    JSON.parse(
-      localStorage.getItem(
-        "leaderboard"
-      )
-    ) || [];
-
-  leaderboard.push({
-
-    name:playerName,
-
-    score:score,
-
-    total:questions.length,
-
-    date:new Date()
-      .toLocaleDateString()
-
-  });
-
-  leaderboard.sort(
-    (a,b) => b.score - a.score
+  localStorage.setItem(
+    "playerName",
+    playerName
   );
 
   localStorage.setItem(
-    "leaderboard",
-
-    JSON.stringify(
-      leaderboard.slice(0,10)
-    )
+    "category",
+    category
   );
+
+  localStorage.setItem(
+    "difficulty",
+    difficulty
+  );
+
+  // GO TO RESULT PAGE
+
+  window.location.href =
+    "result.html";
 
 }
 

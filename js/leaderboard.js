@@ -4,10 +4,11 @@ window.addEventListener("load", () => {
 
   setTimeout(() => {
 
-    document.getElementById("loadingScreen")
-      .style.display = "none";
+    document.getElementById(
+      "loadingScreen"
+    ).style.display = "none";
 
-  }, 1500);
+  }, 1200);
 
 });
 
@@ -18,7 +19,8 @@ const particlesContainer =
 
 for(let i = 0; i < 50; i++){
 
-  const particle = document.createElement("div");
+  const particle =
+    document.createElement("div");
 
   particle.classList.add("particle");
 
@@ -37,21 +39,80 @@ for(let i = 0; i < 50; i++){
   particle.style.opacity =
     Math.random();
 
-  particlesContainer.appendChild(particle);
+  particlesContainer.appendChild(
+    particle
+  );
 
 }
 
-// LEADERBOARD DATA
+// GET DATA
 
-const leaderboard =
-  JSON.parse(localStorage.getItem("leaderboard")) || [];
+let leaderboard =
+  JSON.parse(
+    localStorage.getItem(
+      "leaderboard"
+    )
+  ) || [];
 
-// TABLE BODY
+// REMOVE BAD DATA
+
+leaderboard =
+  leaderboard.filter(player => {
+
+    return (
+      player &&
+      player.name &&
+      typeof player.score === "number"
+    );
+
+  });
+
+// SORT HIGHEST SCORE
+
+leaderboard.sort(
+  (a,b) => {
+
+    // SCORE SORT
+
+    if(b.score !== a.score){
+
+      return b.score - a.score;
+
+    }
+
+    // IF SAME SCORE
+    // LESS TIME WINS
+
+    return (
+      (a.timeTaken || 9999)
+      -
+      (b.timeTaken || 9999)
+    );
+
+  }
+);
+
+// KEEP TOP 10 ONLY
+
+leaderboard =
+  leaderboard.slice(0,10);
+
+// SAVE CLEAN DATA
+
+localStorage.setItem(
+  "leaderboard",
+
+  JSON.stringify(leaderboard)
+);
+
+// TABLE
 
 const leaderboardBody =
-  document.getElementById("leaderboardBody");
+  document.getElementById(
+    "leaderboardBody"
+  );
 
-// DISPLAY LEADERBOARD
+// RENDER
 
 function renderLeaderboard(){
 
@@ -68,23 +129,101 @@ function renderLeaderboard(){
     `;
 
     return;
+
   }
 
-  leaderboard.forEach((player, index) => {
+  leaderboard.forEach(
+    (player,index) => {
 
-    const row = document.createElement("tr");
+      const row =
+        document.createElement("tr");
 
-    row.innerHTML = `
-      <td>#${index + 1}</td>
-      <td>${player.name}</td>
-      <td>${player.score}</td>
-      <td>${player.total}</td>
-      <td>${player.date}</td>
-    `;
+      // PERCENTAGE
 
-    leaderboardBody.appendChild(row);
+      const percentage =
+        Math.round(
+          (
+            player.score /
+            player.total
+          ) * 100
+        );
 
-  });
+      // MEDALS
+
+      let rankDisplay =
+        `#${index + 1}`;
+
+      if(index === 0){
+
+        rankDisplay = "🥇";
+
+      }
+
+      else if(index === 1){
+
+        rankDisplay = "🥈";
+
+      }
+
+      else if(index === 2){
+
+        rankDisplay = "🥉";
+
+      }
+
+      row.innerHTML = `
+
+        <td>${rankDisplay}</td>
+
+        <td>
+          ${player.name}
+        </td>
+
+        <td>
+          ${player.score}
+          /
+          ${player.total}
+          <br>
+          <small>
+            ${percentage}%
+          </small>
+        </td>
+
+        <td>
+          ${player.total}
+        </td>
+
+        <td>
+          ${player.date || "N/A"}
+        </td>
+
+      `;
+
+      // ANIMATION
+
+      row.style.opacity = 0;
+
+      row.style.transform =
+        "translateY(20px)";
+
+      setTimeout(() => {
+
+        row.style.transition =
+          "0.5s";
+
+        row.style.opacity = 1;
+
+        row.style.transform =
+          "translateY(0)";
+
+      }, index * 100);
+
+      leaderboardBody.appendChild(
+        row
+      );
+
+    }
+  );
 
 }
 
@@ -93,7 +232,9 @@ renderLeaderboard();
 // ACHIEVEMENTS
 
 const achievementList =
-  document.getElementById("achievementList");
+  document.getElementById(
+    "achievementList"
+  );
 
 const achievements = [
 
@@ -111,13 +252,18 @@ const achievements = [
 
 achievements.forEach(item => {
 
-  const badge = document.createElement("div");
+  const badge =
+    document.createElement("div");
 
-  badge.classList.add("achievement");
+  badge.classList.add(
+    "achievement"
+  );
 
   badge.textContent = item;
 
-  achievementList.appendChild(badge);
+  achievementList.appendChild(
+    badge
+  );
 
 });
 
@@ -126,7 +272,9 @@ achievements.forEach(item => {
 function showToast(message){
 
   const toast =
-    document.getElementById("toast");
+    document.getElementById(
+      "toast"
+    );
 
   toast.textContent = message;
 
@@ -134,42 +282,61 @@ function showToast(message){
 
   setTimeout(() => {
 
-    toast.classList.remove("show");
+    toast.classList.remove(
+      "show"
+    );
 
-  }, 3000);
+  },3000);
 
 }
 
 // BUTTONS
 
-document.getElementById("homeBtn")
-.addEventListener("click", () => {
+document.getElementById(
+  "homeBtn"
+)
+.addEventListener(
+  "click",
+  () => {
 
-  window.location.href = "../index.html";
-
-});
-
-document.getElementById("clearBtn")
-.addEventListener("click", () => {
-
-  const confirmClear =
-    confirm("Clear leaderboard?");
-
-  if(confirmClear){
-
-    localStorage.removeItem("leaderboard");
-
-    showToast("Leaderboard Cleared!");
-
-    setTimeout(() => {
-
-      location.reload();
-
-    }, 1000);
+    window.location.href =
+      "../index.html";
 
   }
+);
 
-});
+document.getElementById(
+  "clearBtn"
+)
+.addEventListener(
+  "click",
+  () => {
+
+    const confirmClear =
+      confirm(
+        "Clear leaderboard?"
+      );
+
+    if(confirmClear){
+
+      localStorage.removeItem(
+        "leaderboard"
+      );
+
+      showToast(
+        "Leaderboard Cleared!"
+      );
+
+      setTimeout(() => {
+
+        location.reload();
+
+      },1000);
+
+    }
+
+  }
+);
 
 // DAILY CHALLENGE
 
@@ -188,14 +355,25 @@ const challenges = [
 ];
 
 const randomChallenge =
-  challenges[Math.floor(Math.random() * challenges.length)];
 
-document.getElementById("dailyChallengeText")
-.textContent = randomChallenge;
+  challenges[
+    Math.floor(
+      Math.random()
+      *
+      challenges.length
+    )
+  ];
+
+document.getElementById(
+  "dailyChallengeText"
+).textContent =
+  randomChallenge;
 
 // ACCESSIBILITY
 
-document.querySelectorAll("button")
+document.querySelectorAll(
+  "button"
+)
 .forEach(button => {
 
   button.setAttribute(
@@ -207,12 +385,16 @@ document.querySelectorAll("button")
 
 // KEYBOARD SHORTCUTS
 
-document.addEventListener("keydown", (e) => {
+document.addEventListener(
+  "keydown",
+  (e) => {
 
-  if(e.key === "h"){
+    if(e.key === "h"){
 
-    window.location.href = "../index.html";
+      window.location.href =
+        "../index.html";
+
+    }
 
   }
-
-});
+);
