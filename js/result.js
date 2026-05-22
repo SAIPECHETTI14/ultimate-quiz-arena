@@ -53,35 +53,39 @@ const timeText =
 const message =
   document.getElementById("message");
 
-// ACCURACY
+// FIXED PERCENTAGE
 
 const percentage =
   Math.round(
-    (score / totalQuestions) * 100
+    (correctAnswers / totalQuestions) * 100
   );
 
 // ANIMATE SCORE
 
 let current = 0;
 
-const animation = setInterval(() => {
+const animation =
+  setInterval(() => {
 
-  if(current >= percentage){
+    if(current >= percentage){
 
-    clearInterval(animation);
+      clearInterval(animation);
 
-  }
+      scoreText.textContent =
+        `${percentage}%`;
 
-  else{
+    }
 
-    current++;
+    else{
 
-    scoreText.textContent =
-      `${current}%`;
+      current++;
 
-  }
+      scoreText.textContent =
+        `${current}%`;
 
-},20);
+    }
+
+  },20);
 
 // SET STATS
 
@@ -127,7 +131,10 @@ async function saveScore(){
 
     await addDoc(
 
-      collection(db,"leaderboard"),
+      collection(
+        db,
+        "leaderboard"
+      ),
 
       {
 
@@ -137,7 +144,7 @@ async function saveScore(){
 
         difficulty: difficulty,
 
-        score: score,
+        score: correctAnswers,
 
         total: totalQuestions,
 
@@ -247,6 +254,8 @@ function startConfetti(){
     document.getElementById(
       "confettiCanvas"
     );
+
+  if(!canvas) return;
 
   const ctx =
     canvas.getContext("2d");
