@@ -4,13 +4,7 @@ import {
 
   collection,
 
-  getDocs,
-
-  query,
-
-  orderBy,
-
-  limit
+  getDocs
 
 }
 
@@ -21,77 +15,85 @@ const leaderboardBody =
     "leaderboardBody"
   );
 
-async function loadLeaderboard(){
+// LOAD LEADERBOARD
 
-  leaderboardBody.innerHTML =
-    `
-      <tr>
-        <td colspan="5">
-          Loading...
-        </td>
-      </tr>
-    `;
+async function loadLeaderboard(){
 
   try{
 
-    const q = query(
+    const snapshot =
+      await getDocs(
 
-      collection(
-        db,
-        "leaderboard"
-      ),
+        collection(
+          db,
+          "leaderboard"
+        )
 
-      orderBy(
-        "percentage",
-        "desc"
-      ),
-
-      limit(10)
-
-    );
-
-    const querySnapshot =
-      await getDocs(q);
+      );
 
     leaderboardBody.innerHTML = "";
 
-    if(querySnapshot.empty){
+    // NO SCORES
+
+    if(snapshot.empty){
 
       leaderboardBody.innerHTML =
 
       `
-        <tr>
-          <td colspan="5">
-            No scores yet.
-          </td>
-        </tr>
+      <tr>
+        <td colspan="5">
+          No scores yet.
+        </td>
+      </tr>
       `;
 
       return;
 
     }
 
-    let rank = 1;
+    let scores = [];
 
-    querySnapshot.forEach((doc) => {
+    snapshot.forEach((doc) => {
 
-      const data = doc.data();
+      scores.push(doc.data());
+
+    });
+
+    // SORT HIGHEST SCORE
+
+    scores.sort(
+
+      (a,b) =>
+
+      b.percentage -
+      a.percentage
+
+    );
+
+    // TOP 10
+
+    scores =
+      scores.slice(0,10);
+
+    // SHOW SCORES
+
+    scores.forEach((data,index) => {
 
       let medal = "";
 
-      if(rank === 1){
+      if(index === 0){
 
         medal = "🥇";
 
       }
 
-      else if(rank === 2){
+      else if(index === 1){
 
         medal = "🥈";
 
       }
 
-      else if(rank === 3){
+      else if(index === 2){
 
         medal = "🥉";
 
@@ -103,29 +105,30 @@ async function loadLeaderboard(){
       <tr>
 
         <td>
-          ${medal} ${rank}
+          ${medal}
+          ${index + 1}
         </td>
 
         <td>
-          ${data.name}
+          ${data.name || "Player"}
         </td>
 
         <td>
-          ${data.percentage}%
+          ${data.percentage || 0}%
         </td>
 
         <td>
-          ${data.score}/${data.total}
+          ${data.score || 0}
+          /
+          ${data.total || 0}
         </td>
 
         <td>
-          ${data.date}
+          ${data.date || "-"}
         </td>
 
       </tr>
       `;
-
-      rank++;
 
     });
 
@@ -138,11 +141,11 @@ async function loadLeaderboard(){
     leaderboardBody.innerHTML =
 
     `
-      <tr>
-        <td colspan="5">
-          Firebase Error
-        </td>
-      </tr>
+    <tr>
+      <td colspan="5">
+        Firebase Error
+      </td>
+    </tr>
     `;
 
   }
