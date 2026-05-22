@@ -36,6 +36,9 @@ const category =
 const difficulty =
   localStorage.getItem("difficulty") || "easy";
 
+const amount =
+  localStorage.getItem("amount") || 10;
+
 // ELEMENTS
 
 const scoreText =
@@ -53,14 +56,25 @@ const timeText =
 const message =
   document.getElementById("message");
 
-// FIXED PERCENTAGE
+// ACCURACY
 
 const percentage =
   Math.round(
-    (correctAnswers / totalQuestions) * 100
+    (score / totalQuestions) * 100
   );
 
-// ANIMATE SCORE
+// SHOW STATS
+
+correctText.textContent =
+  correctAnswers;
+
+wrongText.textContent =
+  wrongAnswers;
+
+timeText.textContent =
+  `${timeTaken}s`;
+
+// ANIMATION
 
 let current = 0;
 
@@ -70,9 +84,6 @@ const animation =
     if(current >= percentage){
 
       clearInterval(animation);
-
-      scoreText.textContent =
-        `${percentage}%`;
 
     }
 
@@ -87,18 +98,7 @@ const animation =
 
   },20);
 
-// SET STATS
-
-correctText.textContent =
-  correctAnswers;
-
-wrongText.textContent =
-  wrongAnswers;
-
-timeText.textContent =
-  `${timeTaken}s`;
-
-// MOTIVATION
+// MESSAGE
 
 if(percentage >= 80){
 
@@ -123,7 +123,7 @@ else{
 
 }
 
-// SAVE SCORE ONLINE
+// SAVE ONLINE SCORE
 
 async function saveScore(){
 
@@ -138,37 +138,46 @@ async function saveScore(){
 
       {
 
-        name: playerName,
+        name:
+          playerName,
 
-        category: category,
+        category:
+          category,
 
-        difficulty: difficulty,
+        difficulty:
+          difficulty,
 
-        score: correctAnswers,
+        amount:
+          Number(amount),
 
-        total: totalQuestions,
+        score:
+          score,
 
-        percentage: percentage,
+        total:
+          totalQuestions,
 
-        correctAnswers: correctAnswers,
+        percentage:
+          percentage,
 
-        wrongAnswers: wrongAnswers,
+        correctAnswers:
+          correctAnswers,
 
-        timeTaken: timeTaken,
+        wrongAnswers:
+          wrongAnswers,
+
+        timeTaken:
+          timeTaken,
 
         date:
           new Date()
           .toLocaleString()
-
-        amount:
-          totalQuestions
 
       }
 
     );
 
     console.log(
-      "Score saved online!"
+      "Score Uploaded"
     );
 
   }
@@ -176,7 +185,7 @@ async function saveScore(){
   catch(error){
 
     console.log(
-      "Firebase Error:",
+      "Firebase Error",
       error
     );
 
@@ -186,31 +195,42 @@ async function saveScore(){
 
 saveScore();
 
-// BUTTONS
+// PLAY AGAIN
 
-document.getElementById(
+document
+.getElementById(
   "restartBtn"
 )
-.addEventListener("click", () => {
+.addEventListener(
+  "click",
+  () => {
 
-  window.location.href =
-    "../index.html";
+    window.location.href =
+      "../index.html";
 
-});
+  }
+);
 
-document.getElementById(
+// LEADERBOARD
+
+document
+.getElementById(
   "leaderboardBtn"
 )
-.addEventListener("click", () => {
+.addEventListener(
+  "click",
+  () => {
 
-  window.location.href =
-    "leaderboard.html";
+    window.location.href =
+      "../pages/leaderboard.html";
 
-});
+  }
+);
 
 // SHARE
 
-document.getElementById(
+document
+.getElementById(
   "shareBtn"
 )
 .addEventListener(
@@ -241,7 +261,7 @@ document.getElementById(
     else{
 
       alert(
-        "Sharing not supported."
+        "Sharing not supported on this browser."
       );
 
     }
@@ -271,7 +291,7 @@ function startConfetti(){
 
   const pieces = [];
 
-  for(let i = 0; i < 150; i++){
+  for(let i=0;i<150;i++){
 
     pieces.push({
 
@@ -303,7 +323,6 @@ function startConfetti(){
 
       0,
       0,
-
       canvas.width,
       canvas.height
 
@@ -312,13 +331,13 @@ function startConfetti(){
     pieces.forEach(piece => {
 
       ctx.fillStyle =
-        `hsl(${Math.random()*360},100%,50%)`;
+
+      `hsl(${Math.random()*360},100%,50%)`;
 
       ctx.fillRect(
 
         piece.x,
         piece.y,
-
         piece.size,
         piece.size
 
