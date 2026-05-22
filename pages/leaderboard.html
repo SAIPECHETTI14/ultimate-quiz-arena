@@ -33,9 +33,13 @@
 
   </div>
 
+  <!-- MAIN -->
+
   <main class="leaderboard-container">
 
     <div class="leaderboard-card">
+
+      <!-- TITLE -->
 
       <h1>
         Ultimate Quiz Arena
@@ -51,77 +55,95 @@
 
       <div class="filters">
 
-        <select id="categoryFilter">
+        <!-- CATEGORY -->
 
-          <option value="all">
-            All Categories
-          </option>
+        <div class="filter-box">
 
-          <option value="coding">
-            Coding
-          </option>
+          <select id="categoryFilter">
 
-          <option value="scienceLocal">
-            Science
-          </option>
+            <option value="all">
+              All Categories
+            </option>
 
-          <option value="anime">
-            Anime
-          </option>
+            <option value="coding">
+              Coding
+            </option>
 
-          <option value="moviesLocal">
-            Movies
-          </option>
+            <option value="scienceLocal">
+              Science
+            </option>
 
-          <option value="sportsLocal">
-            Sports
-          </option>
+            <option value="anime">
+              Anime
+            </option>
 
-        </select>
+            <option value="moviesLocal">
+              Movies
+            </option>
 
-        <select id="difficultyFilter">
+            <option value="sportsLocal">
+              Sports
+            </option>
 
-          <option value="all">
-            All Difficulty
-          </option>
+          </select>
 
-          <option value="easy">
-            Easy
-          </option>
+        </div>
 
-          <option value="medium">
-            Medium
-          </option>
+        <!-- DIFFICULTY -->
 
-          <option value="hard">
-            Hard
-          </option>
+        <div class="filter-box">
 
-        </select>
+          <select id="difficultyFilter">
 
-        <select id="amountFilter">
+            <option value="all">
+              All Difficulty
+            </option>
 
-          <option value="all">
-            All Questions
-          </option>
+            <option value="easy">
+              Easy
+            </option>
 
-          <option value="5">
-            5 Questions
-          </option>
+            <option value="medium">
+              Medium
+            </option>
 
-          <option value="10">
-            10 Questions
-          </option>
+            <option value="hard">
+              Hard
+            </option>
 
-          <option value="20">
-            20 Questions
-          </option>
+          </select>
 
-          <option value="30">
-            30 Questions
-          </option>
+        </div>
 
-        </select>
+        <!-- QUESTIONS -->
+
+        <div class="filter-box">
+
+          <select id="amountFilter">
+
+            <option value="all">
+              All Questions
+            </option>
+
+            <option value="5">
+              5 Questions
+            </option>
+
+            <option value="10">
+              10 Questions
+            </option>
+
+            <option value="20">
+              20 Questions
+            </option>
+
+            <option value="30">
+              30 Questions
+            </option>
+
+          </select>
+
+        </div>
 
       </div>
 
@@ -136,10 +158,15 @@
             <tr>
 
               <th>Rank</th>
+
               <th>Player</th>
+
               <th>Category</th>
+
               <th>Difficulty</th>
+
               <th>Score</th>
+
               <th>Date</th>
 
             </tr>
@@ -154,7 +181,7 @@
 
       </div>
 
-      <!-- BUTTON -->
+      <!-- BUTTONS -->
 
       <div class="buttons">
 
@@ -169,6 +196,8 @@
     </div>
 
   </main>
+
+  <!-- SCRIPT -->
 
   <script
     type="module"
