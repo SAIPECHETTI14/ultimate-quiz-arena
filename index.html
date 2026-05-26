@@ -28,6 +28,25 @@
 </head>
 
 <body>
+  <script>
+
+  // CHECK LOGIN
+
+  const isLoggedIn =
+    localStorage.getItem(
+      "isLoggedIn"
+    );
+
+  // IF NOT LOGGED IN
+
+  if(isLoggedIn !== "true"){
+
+    window.location.href =
+      "pages/login.html";
+
+  }
+
+</script>
 
   <!-- Animated Background -->
   <div class="background-animation"></div>
@@ -41,12 +60,21 @@
     <ul class="nav-links" id="navLinks">
       <li><a href="index.html">Home</a></li>
       <li><a href="pages/leaderboard.html">Leaderboard</a></li>
+      <li><a href="pages/profile.html">Profile</a></li>
+      <li><a href="pages/daily.html">Daily</a></li>
+      <li><a href="pages/multiplayer.html">Rooms</a></li>
+      <li><a href="pages/ai-generator.html">AI Quiz</a></li>
+      <li><a href="pages/admin.html">Admin</a></li>
     </ul>
 
     <div class="nav-actions">
 
       <button id="themeToggle" class="theme-btn">
         🌙
+      </button>
+
+      <button id="logoutHomeBtn" class="theme-btn">
+        Logout
       </button>
 
       <button class="mobile-menu-btn" id="mobileMenuBtn">
@@ -74,6 +102,8 @@
         Test your knowledge with powerful quizzes,
         live scores, animated gameplay, and leaderboard battles.
       </p>
+
+      <p class="welcome-text" id="welcomeText"></p>
 
       <!-- Quiz Form -->
       <form id="quizConfigForm">
@@ -106,6 +136,8 @@
        <option value="moviesLocal">🎥 Movies Local</option>
 
        <option value="sportsLocal">🏆 Sports Local</option>
+
+       <option value="aiLocal">AI Generated</option>
 
       </select>
 
@@ -144,20 +176,6 @@
           />
          </div>
 
-        <!-- Player Name -->
-        <div class="input-group">
-          <label for="playerName">
-            Player Name
-          </label>
-
-          <input
-            type="text"
-            id="playerName"
-            placeholder="Enter your name"
-            required
-          />
-         </div>
-
         <!-- Start Button -->
         <button type="submit" class="start-btn"
         >
@@ -174,7 +192,7 @@
   <div id="toast"></div>
 
   <script src="js/theme.js"></script>
-  <script src="script.js"></script>
+  <script type="module" src="script.js"></script>
 
 </body>
 </html>

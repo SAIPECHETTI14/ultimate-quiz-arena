@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Quiz Generator</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="../css/features.css">
+</head>
+<body>
+  <main class="feature-shell">
+    <div class="feature-header">
+      <div>
+        <h1>AI Quiz Generator</h1>
+        <p class="muted">Create a topic-based quiz and play it in the normal arena flow.</p>
+      </div>
+      <a class="feature-link" href="../index.html">Home</a>
+    </div>
+
+    <section class="feature-panel">
+      <div class="form-grid">
+        <input id="topicInput" type="text" placeholder="Topic, example: JavaScript">
+        <select id="difficultyInput">
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+        <input id="amountInput" type="number" min="5" max="20" value="5">
+      </div>
+      <div class="button-row">
+        <button id="generateBtn" type="button">Generate Quiz</button>
+        <button id="startAiQuizBtn" type="button" disabled>Start Generated Quiz</button>
+      </div>
+    </section>
+
+    <section class="feature-grid" id="previewList" style="margin-top:18px;"></section>
+  </main>
+
+  <script type="module" src="../js/ai-generator.js"></script>
+</body>
+</html>

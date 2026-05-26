@@ -1,43 +1,88 @@
-// FUTURE MULTIPLAYER SUPPORT
+const roomCodeInput = document.getElementById("roomCodeInput");
+const createRoomBtn = document.getElementById("createRoomBtn");
+const joinRoomBtn = document.getElementById("joinRoomBtn");
+const startRoomQuizBtn = document.getElementById("startRoomQuizBtn");
+const roomStatus = document.getElementById("roomStatus");
+const roomPlayers = document.getElementById("roomPlayers");
 
-const multiplayerRoom = {
+const playerName = localStorage.getItem("playerName") || "Player";
 
-  roomId: null,
-
-  players: [],
-
-  scores: {},
-
-  status: "waiting"
-
-};
-
-// CREATE ROOM
-
-function createRoom(){
-
-  multiplayerRoom.roomId =
-    Math.random().toString(36).substring(2, 8);
-
-  console.log(
-    "Room Created:",
-    multiplayerRoom.roomId
-  );
-
+function getRooms(){
+  return JSON.parse(localStorage.getItem("multiplayerRooms") || "{}");
 }
 
-// JOIN ROOM
-
-function joinRoom(playerName){
-
-  multiplayerRoom.players.push(playerName);
-
+function saveRooms(rooms){
+  localStorage.setItem("multiplayerRooms", JSON.stringify(rooms));
 }
 
-// UPDATE SCORE
+function renderRoom(room){
+  if(!room) return;
 
-function updateScore(playerName, score){
+  if(roomStatus){
+    roomStatus.textContent = `Room ${room.code} - ${room.status}`;
+  }
 
-  multiplayerRoom.scores[playerName] = score;
+  if(roomPlayers){
+    roomPlayers.innerHTML = room.players
+      .map((name) => `<div class="feature-item"><h3>${name}</h3><p>Ready to play</p></div>`)
+      .join("");
+  }
 
+  if(startRoomQuizBtn) startRoomQuizBtn.disabled = false;
+}
+
+createRoomBtn?.addEventListener("click", () => {
+  const rooms = getRooms();
+  const code = Math.random().toString(36).slice(2, 8).toUpperCase();
+  const room = {
+    code,
+    host: playerName,
+    players: [playerName],
+    scores: {},
+    status: "waiting"
+  };
+
+  rooms[code] = room;
+  saveRooms(rooms);
+  localStorage.setItem("activeRoomCode", code);
+  if(roomCodeInput) roomCodeInput.value = code;
+  renderRoom(room);
+});
+
+joinRoomBtn?.addEventListener("click", () => {
+  const code = roomCodeInput?.value.trim().toUpperCase();
+  const rooms = getRooms();
+  const room = rooms[code];
+
+  if(!room){
+    alert("Room not found. Create a new room or check the code.");
+    return;
+  }
+
+  if(!room.players.includes(playerName)){
+    room.players.push(playerName);
+  }
+
+  rooms[code] = room;
+  saveRooms(rooms);
+  localStorage.setItem("activeRoomCode", code);
+  renderRoom(room);
+});
+
+startRoomQuizBtn?.addEventListener("click", () => {
+  const code = localStorage.getItem("activeRoomCode");
+  if(!code) return;
+
+  localStorage.setItem("quizCategory", "coding");
+  localStorage.setItem("quizDifficulty", "easy");
+  localStorage.setItem("quizAmount", "10");
+  localStorage.setItem("multiplayerMode", "true");
+  window.location.href = "quiz.html";
+});
+
+const activeCode = localStorage.getItem("activeRoomCode");
+if(activeCode){
+  const activeRoom = getRooms()[activeCode];
+  if(roomCodeInput) roomCodeInput.value = activeCode;
+  renderRoom(activeRoom);
 }

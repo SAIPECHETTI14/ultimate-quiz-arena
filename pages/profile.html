@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+  <title>
+    User Profile
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="../css/profile.css">
+
+</head>
+
+<body>
+
+  <div class="profile-container">
+
+    <!-- PROFILE CARD -->
+
+    <div class="profile-card">
+
+      <!-- PROFILE TOP -->
+
+      <div class="profile-top">
+
+      <!-- PROFILE IMAGE -->
+
+<div class="avatar-section">
+
+  <div class="avatar-wrapper">
+
+    <img
+      id="profileAvatar"
+      src="https://i.ibb.co/4pDNDk1/avatar.png"
+      alt="avatar"
+    >
+
+    <label
+      for="avatarInput"
+      class="upload-btn"
+    >
+      +
+    </label>
+
+    <input
+      type="file"
+      id="avatarInput"
+      accept="image/*"
+    >
+
+  </div>
+
+</div>
+
+        <!-- USERNAME -->
+
+        <h1 id="profileName">
+
+          Player
+
+        </h1>
+
+        <!-- EMAIL -->
+
+        <p id="profileEmail">
+
+          user@email.com
+
+        </p>
+
+        <p id="emailStatus" class="email-status">
+
+          Checking verification...
+
+        </p>
+
+        <!-- USERNAME EDIT -->
+
+        <div class="edit-user-box">
+
+          <input
+            type="text"
+            id="editUsername"
+            placeholder="Change username">
+
+          <button
+            id="saveUsernameBtn">
+
+            Save
+
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- XP -->
+
+      <div class="xp-box">
+
+        <h2>
+
+          XP Level
+
+        </h2>
+
+        <div class="xp-bar">
+
+          <div id="xpProgress">
+
+          </div>
+
+        </div>
+
+        <p id="xpText">
+
+          Level 1
+
+        </p>
+
+      </div>
+
+      <!-- STATS -->
+
+      <div class="stats-grid">
+
+        <div class="stat-card">
+
+          <h3 id="totalQuiz">
+
+            0
+
+          </h3>
+
+          <p>
+
+            Quizzes
+
+          </p>
+
+        </div>
+
+        <div class="stat-card">
+
+          <h3 id="bestScore">
+
+            0%
+
+          </h3>
+
+          <p>
+
+            Best Score
+
+          </p>
+
+        </div>
+
+        <div class="stat-card">
+
+          <h3 id="totalXP">
+
+            0
+
+          </h3>
+
+          <p>
+
+            XP
+
+          </p>
+
+        </div>
+
+      </div>
+
+      <!-- ACHIEVEMENTS -->
+
+      <div class="achievement-box">
+
+        <h2>
+
+          Achievements
+
+        </h2>
+
+        <div id="badges">
+
+        </div>
+
+      </div>
+
+      <!-- QUIZ HISTORY -->
+
+      <div class="history-box">
+
+        <h2>
+
+          Quiz History
+
+        </h2>
+
+        <div id="historyList">
+
+        </div>
+
+      </div>
+
+      <!-- BUTTONS -->
+
+      <div class="profile-buttons">
+
+        <button id="homeBtn">
+
+          Home
+
+        </button>
+
+        <button id="logoutBtn">
+
+          Logout
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script
+    type="module"
+    src="../js/profile.js">
+
+  </script>
+
+</body>
+
+</html>

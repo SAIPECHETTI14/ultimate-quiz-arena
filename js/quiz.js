@@ -1,3 +1,6 @@
+// IMPORT QUESTION FETCHER
+import { fetchQuestions } from "./api.js";
+
 const questionElement =
   document.getElementById("question");
 
@@ -29,7 +32,7 @@ let score = 0;
 
 let timer;
 
-let timeLeft = 15;
+let timeLeft = 30;
 
 let totalTimeTaken = 0;
 
@@ -41,7 +44,7 @@ const playerName =
   localStorage.getItem("playerName") || "Player";
 
 const category =
-  localStorage.getItem("quizCategory") || "General";
+  localStorage.getItem("quizCategory") || "9";
 
 const difficulty =
   localStorage.getItem("quizDifficulty") || "easy";
@@ -61,10 +64,10 @@ const warningSound =
 
 async function startQuiz(){
 
-  const amount =
-    parseInt(
-      localStorage.getItem("quizAmount")
-    );
+  let amount = parseInt(localStorage.getItem("quizAmount"), 10);
+  if(!amount || Number.isNaN(amount) || amount <= 0){
+    amount = 10; // fallback default
+  }
 
   questions =
     await fetchQuestions(
@@ -73,16 +76,18 @@ async function startQuiz(){
       amount
     );
 
-  if(
-    !questions ||
-    questions.length === 0
-  ){
-
-    questionElement.textContent =
-      "Failed to load questions.";
-
+  if(!questions || questions.length === 0){
+    console.warn('Quiz failed to load for category:', category, 'difficulty:', difficulty, 'amount:', amount);
+    if(category !== "9"){
+      questions = await fetchQuestions("9", difficulty, amount);
+      if(questions && questions.length > 0){
+        showQuestion();
+        return;
+      }
+    }
+    if(questionElement) questionElement.textContent = "No questions available for the selected settings.";
+    if(typeof window !== 'undefined' && typeof window.showToast === 'function') window.showToast('No questions found for these settings. Try a different category or check your connection.');
     return;
-
   }
 
   showQuestion();
@@ -181,7 +186,7 @@ function resetState(){
 
   warningSound.currentTime = 0;
 
-  timeLeft = 15;
+  timeLeft = 30;
 
   timerElement.textContent =
     timeLeft;
@@ -427,6 +432,8 @@ function finishQuiz(){
     "difficulty",
     difficulty
   );
+
+  localStorage.removeItem("activeResultId");
 
   // GO TO RESULT PAGE
 

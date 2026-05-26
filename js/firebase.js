@@ -1,8 +1,48 @@
-// FIREBASE IMPORTS
+// FIREBASE APP
 
-import { initializeApp }
+import {
 
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  initializeApp
+
+}
+
+from
+
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+
+// FIREBASE AUTH
+
+import {
+
+  getAuth,
+
+  createUserWithEmailAndPassword,
+
+  signInWithEmailAndPassword,
+
+  signOut,
+
+  onAuthStateChanged,
+
+  GoogleAuthProvider,
+
+  signInWithPopup,
+
+  sendEmailVerification,
+
+  sendPasswordResetEmail,
+
+  updateProfile
+
+}
+
+from
+
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+
+// FIRESTORE
 
 import {
 
@@ -18,17 +58,31 @@ import {
 
   orderBy,
 
-  limit
+  limit,
+
+  updateDoc,
+
+  setDoc,
+
+  getDoc,
+
+  doc,
+
+  serverTimestamp
 
 }
 
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+from
 
-// FIREBASE CONFIG
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+// CONFIG
 
 const firebaseConfig = {
 
-  apiKey: "AIzaSyC_QRMDDe4XG2xEqpjqjTmKQBBpceejdpU",
+  apiKey:
+    "AIzaSyC_QRMDDe4XG2xEqpjqjTmKQBBpceejdpU",
 
   authDomain:
     "ultimate-quiz-arena-44238.firebaseapp.com",
@@ -47,19 +101,40 @@ const firebaseConfig = {
 
 };
 
+
 // INITIALIZE
 
 const app =
   initializeApp(firebaseConfig);
 
+
+// AUTH
+
+const auth =
+  getAuth(app);
+
+
+// FIRESTORE
+
 const db =
   getFirestore(app);
 
-// EXPORT
+
+// GOOGLE PROVIDER
+
+const provider =
+  new GoogleAuthProvider();
+
+
+// EXPORTS
 
 export {
 
+  auth,
+
   db,
+
+  provider,
 
   collection,
 
@@ -71,6 +146,34 @@ export {
 
   orderBy,
 
-  limit
+  limit,
+
+  updateDoc,
+
+  setDoc,
+
+  getDoc,
+
+  doc,
+
+  serverTimestamp,
+
+  createUserWithEmailAndPassword,
+
+  signInWithEmailAndPassword,
+
+  signOut,
+
+  onAuthStateChanged,
+
+  GoogleAuthProvider,
+
+  signInWithPopup,
+
+  sendEmailVerification,
+
+  sendPasswordResetEmail,
+
+  updateProfile
 
 };

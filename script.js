@@ -1,3 +1,5 @@
+import { auth, signOut } from "./js/firebase.js";
+
 // PAGE LOADING ANIMATION
 
 window.addEventListener("load", () => {
@@ -5,123 +7,231 @@ window.addEventListener("load", () => {
   document.body.style.opacity = "1";
 
 });
+
 // FORM
 
-const form = document.getElementById("quizConfigForm");
+const form =
+document.getElementById(
+  "quizConfigForm"
+);
 
 // MOBILE MENU
 
-const mobileMenuBtn = document.getElementById("mobileMenuBtn");
-const navLinks = document.getElementById("navLinks");
+const mobileMenuBtn =
+document.getElementById(
+  "mobileMenuBtn"
+);
 
-mobileMenuBtn.addEventListener("click", () => {
-  navLinks.classList.toggle("active");
-});
+const navLinks =
+document.getElementById(
+  "navLinks"
+);
+
+const logoutHomeBtn =
+document.getElementById(
+  "logoutHomeBtn"
+);
+
+// MOBILE NAV TOGGLE
+
+mobileMenuBtn.addEventListener(
+  "click",
+  () => {
+
+    navLinks.classList.toggle(
+      "active"
+    );
+
+  }
+);
+
+if(logoutHomeBtn){
+
+  logoutHomeBtn.addEventListener(
+    "click",
+    async () => {
+
+      await signOut(auth);
+
+      localStorage.removeItem("isLoggedIn");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("userEmail");
+
+      window.location.href =
+      "pages/login.html";
+
+    }
+  );
+
+}
 
 // TOAST FUNCTION
 
-function showToast(message) {
+function showToast(message){
 
-  const toast = document.getElementById("toast");
+  const toast =
+  document.getElementById(
+    "toast"
+  );
 
-  toast.textContent = message;
+  toast.textContent =
+  message;
 
-  toast.classList.add("show");
+  toast.classList.add(
+    "show"
+  );
 
-  setTimeout(() => {
-    toast.classList.remove("show");
-  }, 3000);
+  setTimeout(()=>{
+
+    toast.classList.remove(
+      "show"
+    );
+
+  },3000);
 
 }
 
 // FORM SUBMIT
 
-form.addEventListener("submit", (e) => {
+form.addEventListener(
+  "submit",
+  (e)=>{
 
-  e.preventDefault();
+    e.preventDefault();
 
-  const category = document.getElementById("category").value;
+    const category =
+    document.getElementById(
+      "category"
+    ).value;
 
-  const difficulty = document.getElementById("difficulty").value;
+    const difficulty =
+    document.getElementById(
+      "difficulty"
+    ).value;
 
-  const amount = document.getElementById("amount").value;
+    const amount =
+    document.getElementById(
+      "amount"
+    ).value;
 
-  const playerName = document.getElementById("playerName").value;
+    localStorage.setItem(
+      "quizCategory",
+      category
+    );
 
-  // Save settings to localStorage
+    localStorage.setItem(
+      "quizDifficulty",
+      difficulty
+    );
 
-  localStorage.setItem("quizCategory", category);
+    localStorage.setItem(
+      "quizAmount",
+      amount
+    );
 
-  localStorage.setItem("quizDifficulty", difficulty);
+    const loggedInName = localStorage.getItem("playerName") || "Player";
+    localStorage.setItem("playerName", loggedInName);
 
-  localStorage.setItem("quizAmount", amount);
+    showToast(
+      "Quiz Starting..."
+    );
 
-  localStorage.setItem("playerName", playerName);
+    // REDIRECT
 
-  showToast("Quiz Starting...");
+    setTimeout(()=>{
 
-  // Redirect
+      window.location.href =
+      "pages/quiz.html";
 
-  setTimeout(() => {
+    },1500);
 
-    window.location.href = "pages/quiz.html";
+  }
+);
 
-  }, 1500);
+// USER WELCOME TEXT
+const welcomeText = document.getElementById("welcomeText");
+if(welcomeText){
+  const loggedInName = localStorage.getItem("playerName") || "Player";
+  welcomeText.textContent = `Welcome back, ${loggedInName}! Ready for a new quiz?`;
+}
 
-});
 // ACCESSIBILITY
 
-document.querySelectorAll("button")
-.forEach(button => {
+document.querySelectorAll(
+  "button"
+)
+.forEach(button=>{
 
   button.setAttribute(
+
     "aria-label",
+
     button.textContent
+
   );
 
 });
 
 // ENTER KEY START QUIZ
 
-document.addEventListener("keydown", (e) => {
+document.addEventListener(
+  "keydown",
+  (e)=>{
 
-  if(e.key === "Enter"){
+    if(e.key === "Enter"){
 
-    const active =
-      document.activeElement.tagName;
+      const active =
+      document.activeElement
+      .tagName;
 
-    if(active !== "TEXTAREA"){
+      if(
+        active !==
+        "TEXTAREA"
+      ){
 
-      form.requestSubmit();
+        form.requestSubmit();
+
+      }
 
     }
 
   }
+);
 
-});
 // SMOOTH PAGE TRANSITIONS
 
 document.querySelectorAll("a")
-.forEach(link => {
+.forEach(link=>{
 
-  link.addEventListener("click", e => {
+  link.addEventListener(
+    "click",
+    e=>{
 
-    const href = link.getAttribute("href");
+      const href =
+      link.getAttribute(
+        "href"
+      );
 
-    if(href && !href.startsWith("#")){
+      if(
+        href &&
+        !href.startsWith("#")
+      ){
 
-      e.preventDefault();
+        e.preventDefault();
 
-      document.body.style.opacity = "0";
+        document.body.style.opacity =
+        "0";
 
-      setTimeout(() => {
+        setTimeout(()=>{
 
-        window.location.href = href;
+          window.location.href =
+          href;
 
-      }, 300);
+        },300);
+
+      }
 
     }
-
-  });
+  );
 
 });

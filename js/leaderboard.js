@@ -142,8 +142,8 @@ function renderLeaderboard(){
 
         score =>
 
-        score.amount ==
-        amountFilter.value
+        score.amount ===
+        Number(amountFilter.value)
 
       );
 
