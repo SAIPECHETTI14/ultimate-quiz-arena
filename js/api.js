@@ -115,21 +115,6 @@ async function fetchQuestions(
 
   }
 
-  if(category === "aiLocal"){
-
-    const aiQuestions =
-      JSON.parse(
-        localStorage.getItem("aiGeneratedQuestions") || "[]"
-      );
-
-    return handleLocalQuestions(
-      aiQuestions,
-      amount,
-      "AI Generated"
-    );
-
-  }
-
   // API CATEGORIES
 
   try{

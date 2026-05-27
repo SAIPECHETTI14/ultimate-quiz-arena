@@ -636,6 +636,112 @@ body.light-mode .input-group input{
   }
 
 }
+
+.arena-footer{
+  position:relative;
+  margin-top:50px;
+  padding:45px 20px;
+  width:100%;
+  background:linear-gradient(135deg, rgba(15,23,42,0.6), rgba(30,27,75,0.7), rgba(49,46,129,0.6));
+  border-top:1px solid rgba(0,217,255,0.15);
+  overflow:hidden;
+}
+
+.arena-footer::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:radial-gradient(circle at top left, rgba(124,58,237,0.08), transparent 40%),
+              radial-gradient(circle at bottom right, rgba(0,217,255,0.08), transparent 40%);
+  pointer-events:none;
+}
+
+.footer-shell{
+  position:relative;
+  max-width:1200px;
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:16px;
+  text-align:center;
+}
+
+.footer-title h2{
+  font-size:1.9rem;
+  margin:0;
+  background:linear-gradient(90deg, #00d9ff, #7c3aed);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  font-weight:700;
+}
+
+.footer-dev p{
+  color:#e5e7eb;
+  opacity:0.95;
+  margin:0;
+  font-size:0.95rem;
+}
+
+.footer-links{
+  display:flex;
+  flex-wrap:wrap;
+  gap:16px;
+  justify-content:center;
+  align-items:center;
+}
+
+.footer-links a{
+  color:#e5e7eb;
+  text-decoration:none;
+  font-weight:600;
+  font-size:0.95rem;
+  transition:0.3s ease;
+  padding:8px 14px;
+  border-radius:8px;
+  border:1px solid rgba(0,217,255,0.2);
+}
+
+.footer-links a:hover{
+  color:#00d9ff;
+  border-color:rgba(0,217,255,0.5);
+  background:rgba(0,217,255,0.1);
+  box-shadow:0 0 15px rgba(0,217,255,0.2);
+}
+
+.footer-copy{
+  color:#cbd5e1;
+  opacity:0.85;
+  font-size:0.9rem;
+  padding-top:12px;
+  border-top:1px solid rgba(0,217,255,0.1);
+  width:100%;
+}
+
+@media(max-width:768px){
+  .arena-footer{
+    padding:35px 15px;
+    margin-top:40px;
+  }
+
+  .footer-title h2{
+    font-size:1.5rem;
+  }
+
+  .footer-links{
+    gap:10px;
+  }
+
+  .footer-links a{
+    font-size:0.9rem;
+    padding:6px 10px;
+  }
+
+  .footer-dev p{
+    font-size:0.9rem;
+  }
+}
+
 ::-webkit-scrollbar{
   width:10px;
 }

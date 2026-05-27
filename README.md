@@ -93,8 +93,6 @@ quiz-game
 │   ├── leaderboard.js
 │   ├── api.js
 │   ├── theme.js
-│   ├── ai-generator.js
-│   ├── multiplayer.js
 │
 ├── data
 │   ├── coding.js
@@ -156,8 +154,6 @@ Your site will go live.
 
 # Future Features
 
-- Multiplayer mode
-- AI-generated quizzes
 - Authentication
 - Firebase backend
 - Global rankings

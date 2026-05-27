@@ -10,6 +10,24 @@ import {
 
 from "./firebase.js";
 
+// CATEGORY MAPPING
+const categoryMap = {
+  "9": "General Knowledge",
+  "18": "Computer Science",
+  "17": "Science",
+  "21": "Sports",
+  "11": "Movies",
+  "coding": "Coding",
+  "scienceLocal": "Science",
+  "anime": "Anime",
+  "moviesLocal": "Movies",
+  "sportsLocal": "Sports"
+};
+
+function getCategoryName(categoryId) {
+  return categoryMap[categoryId] || categoryId;
+}
+
 const leaderboardBody =
   document.getElementById(
     "leaderboardBody"
@@ -222,7 +240,7 @@ function renderLeaderboard(){
       </td>
 
       <td>
-        ${data.category || "-"}
+        ${getCategoryName(data.categoryId || data.category) || "-"}
       </td>
 
       <td>

@@ -11,6 +11,24 @@ import {
 
 from "./firebase.js";
 
+// CATEGORY MAPPING
+const categoryMap = {
+  "9": "General Knowledge",
+  "18": "Computer Science",
+  "17": "Science",
+  "21": "Sports",
+  "11": "Movies",
+  "coding": "Coding",
+  "scienceLocal": "Science",
+  "anime": "Anime",
+  "moviesLocal": "Movies",
+  "sportsLocal": "Sports"
+};
+
+function getCategoryName(categoryId) {
+  return categoryMap[categoryId] || categoryId;
+}
+
 // QUIZ DATA
 
 const score =
@@ -31,11 +49,14 @@ Number(localStorage.getItem("timeTaken")) || 0;
 const playerName =
 localStorage.getItem("playerName") || "Player";
 
-const category =
-localStorage.getItem("category") || "General";
+const quizCategory =
+localStorage.getItem("quizCategory") || "9";
+
+const categoryName =
+getCategoryName(quizCategory);
 
 const difficulty =
-localStorage.getItem("difficulty") || "easy";
+localStorage.getItem("quizDifficulty") || "easy";
 
 const amount =
 Number(localStorage.getItem("totalQuestions")) || Number(localStorage.getItem("quizAmount")) || 10;
@@ -159,7 +180,10 @@ async(user)=>{
         user.email,
 
         category:
-        category,
+        categoryName,
+
+        categoryId:
+        quizCategory,
 
         difficulty:
         difficulty,

@@ -43,11 +43,15 @@ let answered = false;
 const playerName =
   localStorage.getItem("playerName") || "Player";
 
-const category =
+let category =
   localStorage.getItem("quizCategory") || "9";
 
 const difficulty =
   localStorage.getItem("quizDifficulty") || "easy";
+
+if(category === "aiLocal"){
+  category = "9";
+}
 
 // SOUNDS
 
@@ -121,7 +125,7 @@ function showQuestion(){
     currentQuestion.difficulty
       .toUpperCase();
 
-  questionElement.innerHTML =
+  questionElement.textContent =
     decodeHTML(
       currentQuestion.question
     );
@@ -155,7 +159,7 @@ function showQuestion(){
       "answer-btn"
     );
 
-    button.innerHTML =
+    button.textContent =
       decodeHTML(answer);
 
     button.addEventListener(
